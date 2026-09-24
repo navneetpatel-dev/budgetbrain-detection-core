@@ -40,7 +40,8 @@ const file = join(mkdtempSync(join(tmpdir(), 'hermes-corpus-')), 'bundle.js');
 writeFileSync(file, es5);
 
 const output = execFileSync(hermes, [file], { encoding: 'utf8' }).trim().split('\n').pop();
-const { pass, failures, perMessageMs } = JSON.parse(output);
+const { pass, failures, perMessageMs, verifyError, verifyMs } = JSON.parse(output);
 console.log(`Hermes corpus: ${pass}/${cases.length} passing, ${perMessageMs.toFixed(3)} ms/message (interpreter).`);
 for (const line of failures) console.error(`  - ${line}`);
-if (failures.length > 0) process.exit(1);
+console.log(verifyError ? `Hermes pack signature check failed: ${verifyError}` : `Hermes pack signature check: verified in ${verifyMs} ms.`);
+if (failures.length > 0 || verifyError) process.exit(1);

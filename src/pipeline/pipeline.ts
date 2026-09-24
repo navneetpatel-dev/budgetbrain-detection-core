@@ -17,6 +17,7 @@ import type { CompiledPack, CompiledTemplate } from './compile';
 import { resolveCategory } from './category';
 import { NO_MERCHANT, isPersonalVpa, looksLikePerson, resolveMerchantName, type ResolvedMerchant } from './merchant';
 import { resolveSender } from './sender';
+import { satisfiesRange } from './semver';
 import { MAX_BODY_CHARS, blank, collapseSpaces, isWordChar, titleCase } from './text';
 import { assignRoles, findAccounts, findDates, findMoney, findReference, findVpas, type AccountToken, type MoneyToken } from './tokens';
 import type { PipelineResult, RecentTransaction, UserContext } from './types';
@@ -61,15 +62,17 @@ function dateOrderFor(country: string | null, ctx: UserContext): 'DMY' | 'MDY' {
   return (region ? COUNTRY_DATE_ORDER[region] : undefined) ?? 'DMY';
 }
 
-function killSwitch(pack: CompiledPack, institutionId: string | null, country: string | null, templateId?: string) {
+function killSwitch(pack: CompiledPack, ctx: UserContext, institutionId: string | null, country: string | null, templateId?: string) {
   let detection = false;
   let autoCreate = false;
-  for (const ks of pack.killSwitches) {
+  const all = ctx.killSwitches ? [...pack.killSwitches, ...ctx.killSwitches] : pack.killSwitches;
+  for (const ks of all) {
     const hit =
       (ks.scope === 'institution' && ks.key === institutionId) ||
       (ks.scope === 'country' && ks.key === country) ||
       (ks.scope === 'template' && ks.key === templateId) ||
-      (ks.scope === 'pack' && country !== null && String(pack.packVersions[country]) === ks.key);
+      (ks.scope === 'pack' && country !== null && String(pack.packVersions[country]) === ks.key) ||
+      (ks.scope === 'app_version' && ctx.appVersion !== undefined && satisfiesRange(ctx.appVersion, ks.key));
     if (!hit) continue;
     if (ks.action === 'disable_detection') detection = true;
     else autoCreate = true;
@@ -262,7 +265,7 @@ export function processMessage(message: NormalizedMessage, pack: CompiledPack, c
   const institutionId = sender.institutionId;
   if (!institutionId) return ignored({ stage: 'INELIGIBLE', reason: 'unknown_sender' }, null);
   const country = pack.institutions.get(institutionId)?.country ?? null;
-  const switches = killSwitch(pack, institutionId, country);
+  const switches = killSwitch(pack, ctx, institutionId, country);
   if (switches.detection) return ignored({ stage: 'INELIGIBLE', reason: 'kill_switch' }, institutionId);
   if (ctx.simSlot != null && message.simSlot !== undefined && message.simSlot !== ctx.simSlot) {
     return ignored({ stage: 'INELIGIBLE', reason: 'sim_filtered' }, institutionId);
@@ -290,7 +293,7 @@ export function processMessage(message: NormalizedMessage, pack: CompiledPack, c
 
   // 4. Template (T3.6): an exact published format beats the generic parser.
   const template = switches.autoCreate ? null : matchTemplate(pack, institutionId, body);
-  const templateSwitches = template ? killSwitch(pack, institutionId, country, template.compiled.template.id) : null;
+  const templateSwitches = template ? killSwitch(pack, ctx, institutionId, country, template.compiled.template.id) : null;
   const usedTemplate = template && !templateSwitches?.detection ? template : null;
 
   let amount = amounts[0]!;

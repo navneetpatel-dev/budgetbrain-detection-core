@@ -14,3 +14,4 @@ export {
 export { resolveCategory, categoryForTaxonomy } from './category';
 export { PhraseMatcher } from './phraseMatcher';
 export type { UserContext, RecentTransaction, MerchantRule, PipelineResult } from './types';
+export { satisfiesRange } from './semver';
