@@ -1,5 +1,5 @@
 import { ed25519 } from '@noble/curves/ed25519.js';
-import { utf8ToBytes } from '@noble/hashes/utils.js';
+import { utf8Bytes } from '../utf8';
 import { canonicalJson } from './canonical';
 import type { KnowledgePack, SignedKnowledgePack } from './types';
 import { validateKnowledgePack } from './validate';
@@ -24,7 +24,7 @@ export function signKnowledgePack(
   if (errors.length > 0) {
     throw new PackVerificationError(`Refusing to sign an invalid pack: ${errors.slice(0, 5).join('; ')}`);
   }
-  const signature = ed25519.sign(utf8ToBytes(canonicalJson(pack)), privateKey);
+  const signature = ed25519.sign(utf8Bytes(canonicalJson(pack)), privateKey);
   return {
     payload: pack,
     signature: { alg: 'Ed25519', keyId, value: toBase64(signature) },
@@ -53,7 +53,7 @@ export function verifyKnowledgePack(signed: unknown, trustedKeys: TrustedKeys): 
   } catch {
     throw new PackVerificationError('Signature is not valid base64');
   }
-  const message = utf8ToBytes(canonicalJson(signed.payload));
+  const message = utf8Bytes(canonicalJson(signed.payload));
   let valid = false;
   try {
     valid = ed25519.verify(signatureBytes, message, publicKey);

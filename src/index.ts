@@ -17,6 +17,7 @@ export * from './fingerprint/fingerprint';
 export * from './pack/types';
 export * from './pack/canonical';
 export * from './pack/validate';
+export * from './pack/delta';
 export {
   PackVerificationError,
   signKnowledgePack,

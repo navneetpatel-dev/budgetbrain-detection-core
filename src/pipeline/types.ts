@@ -1,5 +1,6 @@
 import type { LifecycleState, ReasonCode, TerminalPipelineState } from '../types/lifecycle';
 import type { DetectedCandidate, Direction, TransactionType } from '../types/transaction';
+import type { PackKillSwitch } from '../pack/types';
 import type { MerchantKind } from './merchant';
 
 /** A digest of one recent transaction, used for manual-duplicate, refund-of and transfer pairing. */
@@ -44,6 +45,10 @@ export interface UserContext {
   simSlot?: number | null;
   /** BCP 47, the fallback for date order when the institution's country is unknown. */
   deviceLocale?: string;
+  /** Kill switches from `/detection/config`, applied on top of the pack's own (plan T4.6). */
+  killSwitches?: readonly PackKillSwitch[];
+  /** The app's version, for `app_version` kill switches. */
+  appVersion?: string;
 }
 
 export interface PipelineResult {
