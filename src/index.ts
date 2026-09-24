@@ -7,6 +7,9 @@ export * from './types/lifecycle';
 export * from './money/currencies';
 export * from './money/money';
 
+// Confidence tiers, direction/type rules and balance effect.
+export * from './confidence/evidence';
+
 // Duplicate identity.
 export * from './fingerprint/fingerprint';
 
