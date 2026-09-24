@@ -372,5 +372,28 @@
       "terminal": "IGNORED",
       "reasonCode": "non_transaction_notice"
     }
+  },
+  {
+    "id": "in.hdfc_bank.content_signal_unknown_header",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.hdfc_bank",
+    "language": "en",
+    "input": {
+      "id": "in.hdfc_bank.content_signal_unknown_header",
+      "sender": "JM-HDFCNW",
+      "body": "Rs.1,250.00 debited from your HDFC Bank a/c **1234 on 23-09-26 to VPA swiggy@icici. Ref 425612345678",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "NEEDS_REVIEW",
+      "direction": "DEBIT",
+      "amount": "1250.00",
+      "currency": "INR",
+      "accountTail": "1234",
+      "referenceNumber": "425612345678",
+      "transactionType": "expense"
+    }
   }
 ]

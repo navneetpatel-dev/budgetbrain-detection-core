@@ -8,6 +8,7 @@
     "in.hdfc_bank.card_bill_debit",
     "in.hdfc_bank.card_declined",
     "in.hdfc_bank.cashback_credit",
+    "in.hdfc_bank.content_signal_unknown_header",
     "in.hdfc_bank.gapdoc_card_spend_otp_footer",
     "in.hdfc_bank.gapdoc_otp",
     "in.hdfc_bank.gapdoc_refund",
@@ -39,6 +40,7 @@
     "in.state_bank_of_india.interest_credit",
     "in.unknown.bank_like_unknown_sender",
     "in.unknown.gapdoc_finote",
-    "in.unknown.gapdoc_personal_sms"
+    "in.unknown.gapdoc_personal_sms",
+    "in.unknown.spoofed_bank_name_from_phone"
   ]
 }
