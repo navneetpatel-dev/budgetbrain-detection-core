@@ -2,10 +2,10 @@
   "payload": {
     "meta": {
       "schemaVersion": 1,
-      "packVersion": 1,
+      "packVersion": 2,
       "country": "IN",
       "generatedAt": "2026-09-24T00:00:00Z",
-      "minCoreVersion": "0.1.0"
+      "minCoreVersion": "0.4.0"
     },
     "institutions": [
       {
@@ -177,7 +177,10 @@
           "withdrawn",
           "sent",
           "purchase",
-          "debit"
+          "debit",
+          "used for a transaction",
+          "has been used",
+          "withdrawal"
         ]
       },
       {
@@ -187,7 +190,8 @@
           "credited",
           "received",
           "deposited",
-          "added"
+          "added",
+          "credit"
         ]
       },
       {
@@ -345,7 +349,10 @@
           "utr",
           "rrn",
           "upi ref",
-          "txn id"
+          "txn id",
+          "upi",
+          "imps ref",
+          "neft ref"
         ]
       },
       {
@@ -464,6 +471,187 @@
         "domain": "netflix.com",
         "taxonomyCode": "ENTERTAINMENT.STREAMING",
         "mcc": "4899"
+      },
+      {
+        "id": "m.mcdonalds",
+        "name": "McDonald's",
+        "country": null,
+        "domain": "mcdonalds.com",
+        "taxonomyCode": "FOOD_AND_DRINK.RESTAURANT",
+        "mcc": "5814",
+        "wikidataId": "Q38076"
+      },
+      {
+        "id": "m.dominos",
+        "name": "Domino's",
+        "country": null,
+        "domain": "dominos.com",
+        "taxonomyCode": "FOOD_AND_DRINK.RESTAURANT",
+        "mcc": "5814",
+        "wikidataId": "Q839466"
+      },
+      {
+        "id": "m.starbucks",
+        "name": "Starbucks",
+        "country": null,
+        "domain": "starbucks.com",
+        "taxonomyCode": "FOOD_AND_DRINK.COFFEE",
+        "mcc": "5814",
+        "wikidataId": "Q37158"
+      },
+      {
+        "id": "m.flipkart",
+        "name": "Flipkart",
+        "country": "IN",
+        "domain": "flipkart.com",
+        "taxonomyCode": "GENERAL_MERCHANDISE.ONLINE_MARKETPLACES",
+        "mcc": "5399",
+        "wikidataId": "Q1640767"
+      },
+      {
+        "id": "m.blinkit",
+        "name": "Blinkit",
+        "country": "IN",
+        "domain": "blinkit.com",
+        "taxonomyCode": "FOOD_AND_DRINK.GROCERIES",
+        "mcc": "5411"
+      },
+      {
+        "id": "m.zepto",
+        "name": "Zepto",
+        "country": "IN",
+        "domain": "zeptonow.com",
+        "taxonomyCode": "FOOD_AND_DRINK.GROCERIES",
+        "mcc": "5411"
+      },
+      {
+        "id": "m.instamart",
+        "name": "Swiggy Instamart",
+        "country": "IN",
+        "domain": "swiggy.com",
+        "taxonomyCode": "FOOD_AND_DRINK.GROCERIES",
+        "mcc": "5411"
+      },
+      {
+        "id": "m.bigbasket",
+        "name": "BigBasket",
+        "country": "IN",
+        "domain": "bigbasket.com",
+        "taxonomyCode": "FOOD_AND_DRINK.GROCERIES",
+        "mcc": "5411"
+      },
+      {
+        "id": "m.ola",
+        "name": "Ola",
+        "country": "IN",
+        "domain": "olacabs.com",
+        "taxonomyCode": "TRANSPORTATION.TAXIS_AND_RIDE_SHARES",
+        "mcc": "4121"
+      },
+      {
+        "id": "m.rapido",
+        "name": "Rapido",
+        "country": "IN",
+        "domain": "rapido.bike",
+        "taxonomyCode": "TRANSPORTATION.TAXIS_AND_RIDE_SHARES",
+        "mcc": "4121"
+      },
+      {
+        "id": "m.irctc",
+        "name": "IRCTC",
+        "country": "IN",
+        "domain": "irctc.co.in",
+        "taxonomyCode": "TRAVEL.TRAINS",
+        "mcc": "4112"
+      },
+      {
+        "id": "m.makemytrip",
+        "name": "MakeMyTrip",
+        "country": "IN",
+        "domain": "makemytrip.com",
+        "taxonomyCode": "TRAVEL",
+        "mcc": "4722"
+      },
+      {
+        "id": "m.spotify",
+        "name": "Spotify",
+        "country": null,
+        "domain": "spotify.com",
+        "taxonomyCode": "ENTERTAINMENT.STREAMING",
+        "mcc": "4899",
+        "wikidataId": "Q689141"
+      },
+      {
+        "id": "m.hotstar",
+        "name": "JioHotstar",
+        "country": "IN",
+        "domain": "hotstar.com",
+        "taxonomyCode": "ENTERTAINMENT.STREAMING",
+        "mcc": "4899"
+      },
+      {
+        "id": "m.bookmyshow",
+        "name": "BookMyShow",
+        "country": "IN",
+        "domain": "bookmyshow.com",
+        "taxonomyCode": "ENTERTAINMENT.EVENTS",
+        "mcc": "7832"
+      },
+      {
+        "id": "m.airtel",
+        "name": "Airtel",
+        "country": "IN",
+        "domain": "airtel.in",
+        "taxonomyCode": "RENT_AND_UTILITIES.TELECOM",
+        "mcc": "4814"
+      },
+      {
+        "id": "m.jio",
+        "name": "Jio",
+        "country": "IN",
+        "domain": "jio.com",
+        "taxonomyCode": "RENT_AND_UTILITIES.TELECOM",
+        "mcc": "4814"
+      },
+      {
+        "id": "m.tata_power",
+        "name": "Tata Power",
+        "country": "IN",
+        "domain": "tatapower.com",
+        "taxonomyCode": "RENT_AND_UTILITIES.ELECTRICITY",
+        "mcc": "4900"
+      },
+      {
+        "id": "m.bescom",
+        "name": "BESCOM",
+        "country": "IN",
+        "domain": "bescom.co.in",
+        "taxonomyCode": "RENT_AND_UTILITIES.ELECTRICITY",
+        "mcc": "4900"
+      },
+      {
+        "id": "m.indian_oil",
+        "name": "Indian Oil",
+        "country": "IN",
+        "domain": "iocl.com",
+        "taxonomyCode": "TRANSPORTATION.GAS",
+        "mcc": "5541"
+      },
+      {
+        "id": "m.bpcl",
+        "name": "Bharat Petroleum",
+        "country": "IN",
+        "domain": "bharatpetroleum.in",
+        "taxonomyCode": "TRANSPORTATION.GAS",
+        "mcc": "5541"
+      },
+      {
+        "id": "m.hpcl",
+        "name": "Hindustan Petroleum",
+        "country": "IN",
+        "domain": "hindustanpetroleum.com",
+        "taxonomyCode": "TRANSPORTATION.GAS",
+        "mcc": "5541"
       }
     ],
     "merchantAliases": [
@@ -515,6 +703,222 @@
       {
         "merchantId": "m.netflix",
         "alias": "netflix"
+      },
+      {
+        "merchantId": "m.mcdonalds",
+        "alias": "mcdonalds"
+      },
+      {
+        "merchantId": "m.mcdonalds",
+        "alias": "mcdonald s"
+      },
+      {
+        "merchantId": "m.mcdonalds",
+        "alias": "hardcastle restaurants"
+      },
+      {
+        "merchantId": "m.dominos",
+        "alias": "dominos"
+      },
+      {
+        "merchantId": "m.dominos",
+        "alias": "domino s"
+      },
+      {
+        "merchantId": "m.dominos",
+        "alias": "jubilant foodworks"
+      },
+      {
+        "merchantId": "m.starbucks",
+        "alias": "starbucks"
+      },
+      {
+        "merchantId": "m.starbucks",
+        "alias": "tata starbucks"
+      },
+      {
+        "merchantId": "m.flipkart",
+        "alias": "flipkart",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.blinkit",
+        "alias": "blinkit",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.blinkit",
+        "alias": "grofers",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.zepto",
+        "alias": "zepto",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.zepto",
+        "alias": "zeptonow",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.zepto",
+        "alias": "kiranakart technologies",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.instamart",
+        "alias": "instamart",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.instamart",
+        "alias": "swiggy instamart",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.bigbasket",
+        "alias": "bigbasket",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.bigbasket",
+        "alias": "innovative retail concepts",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.ola",
+        "alias": "ola cabs",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.ola",
+        "alias": "olacabs",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.ola",
+        "alias": "ani technologies",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.rapido",
+        "alias": "rapido",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.rapido",
+        "alias": "roppen transportation",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.irctc",
+        "alias": "irctc",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.irctc",
+        "alias": "indian railways",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.makemytrip",
+        "alias": "makemytrip",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.spotify",
+        "alias": "spotify"
+      },
+      {
+        "merchantId": "m.hotstar",
+        "alias": "hotstar",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.hotstar",
+        "alias": "jiohotstar",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.hotstar",
+        "alias": "disney hotstar",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.hotstar",
+        "alias": "novi digital",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.bookmyshow",
+        "alias": "bookmyshow",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.bookmyshow",
+        "alias": "bigtree entertainment",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.airtel",
+        "alias": "airtel",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.airtel",
+        "alias": "bharti airtel",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.jio",
+        "alias": "jio",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.jio",
+        "alias": "reliance jio",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.tata_power",
+        "alias": "tata power",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.bescom",
+        "alias": "bescom",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.indian_oil",
+        "alias": "indian oil",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.indian_oil",
+        "alias": "iocl",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.bpcl",
+        "alias": "bharat petroleum",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.bpcl",
+        "alias": "bpcl",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.hpcl",
+        "alias": "hindustan petroleum",
+        "country": "IN"
+      },
+      {
+        "merchantId": "m.hpcl",
+        "alias": "hpcl",
+        "country": "IN"
       }
     ],
     "currencies": [
@@ -610,12 +1014,20 @@
           "atm",
           "cash withdrawal"
         ]
+      },
+      {
+        "id": "wallet",
+        "name": "Wallet",
+        "paymentMethod": "wallet",
+        "keywords": [
+          "wallet"
+        ]
       }
     ],
     "taxonomy": [
       {
         "code": "FOOD_AND_DRINK",
-        "name": "Food & Drink"
+        "name": "Food"
       },
       {
         "code": "FOOD_AND_DRINK.RESTAURANT",
@@ -666,6 +1078,43 @@
       {
         "code": "OTHER",
         "name": "Other"
+      },
+      {
+        "code": "FOOD_AND_DRINK.COFFEE",
+        "name": "Coffee",
+        "parent": "FOOD_AND_DRINK"
+      },
+      {
+        "code": "TRAVEL",
+        "name": "Travel"
+      },
+      {
+        "code": "TRAVEL.TRAINS",
+        "name": "Trains",
+        "parent": "TRAVEL"
+      },
+      {
+        "code": "ENTERTAINMENT.EVENTS",
+        "name": "Movies & Events",
+        "parent": "ENTERTAINMENT"
+      },
+      {
+        "code": "RENT_AND_UTILITIES.TELECOM",
+        "name": "Phone & Internet",
+        "parent": "RENT_AND_UTILITIES"
+      },
+      {
+        "code": "RENT_AND_UTILITIES.ELECTRICITY",
+        "name": "Electricity",
+        "parent": "RENT_AND_UTILITIES"
+      },
+      {
+        "code": "HEALTH",
+        "name": "Health"
+      },
+      {
+        "code": "EDUCATION",
+        "name": "Education"
       }
     ],
     "mcc": [
@@ -700,6 +1149,22 @@
       {
         "mcc": "4900",
         "taxonomyCode": "RENT_AND_UTILITIES"
+      },
+      {
+        "mcc": "4112",
+        "taxonomyCode": "TRAVEL.TRAINS"
+      },
+      {
+        "mcc": "4722",
+        "taxonomyCode": "TRAVEL"
+      },
+      {
+        "mcc": "7832",
+        "taxonomyCode": "ENTERTAINMENT.EVENTS"
+      },
+      {
+        "mcc": "4814",
+        "taxonomyCode": "RENT_AND_UTILITIES.TELECOM"
       }
     ],
     "killSwitches": []
@@ -707,6 +1172,6 @@
   "signature": {
     "alg": "Ed25519",
     "keyId": "test-2026-09",
-    "value": "MVGnpLZJOiuXCTo2FF4sLbB3z7A9AHpdrfgDhI97sgKPO0SrLNirz5x4PDOhRC4qBhUqnk3UvYzEGZ4/ApHFDA=="
+    "value": "h/PGYWOIXsMfFCQUzltox7vG472wq05lwltlx/rldpQbtdhcMWo63CaksiiAqBkNxlDZpj79k1Dq7vpNSRRgAw=="
   }
 }

@@ -13,11 +13,46 @@ import { join, relative } from 'node:path';
 import { compareCorpusResult, validateCorpusCase } from '../src/corpus/evaluate';
 import type { CorpusActual, CorpusCase } from '../src/corpus/types';
 import type { KnowledgePack } from '../src/pack/types';
+import { formatMinorToDecimal } from '../src/money/money';
+import { compilePack, processMessage, type CompiledPack } from '../src/pipeline';
 
 type CorpusRunner = (testCase: CorpusCase, pack: KnowledgePack) => CorpusActual;
 
-/** Wired to the real pipeline in task T3.1. Until then the runner only validates the corpus. */
-const runner = null as CorpusRunner | null;
+const compiledPacks = new Map<KnowledgePack, CompiledPack>();
+
+/** Runs a case through the core pipeline (task T3.1) and keeps the fields the corpus compares. */
+export const runCase: CorpusRunner = (testCase, pack) => {
+  let compiled = compiledPacks.get(pack);
+  if (!compiled) {
+    compiled = compilePack(pack);
+    compiledPacks.set(pack, compiled);
+  }
+  const result = processMessage(testCase.input, compiled, {
+    userId: 'corpus-user',
+    ...(testCase.context?.ownAccountTails ? { ownAccountTails: testCase.context.ownAccountTails } : {}),
+    ...(testCase.context?.ownVpas ? { ownVpas: testCase.context.ownVpas } : {}),
+  });
+  const c = result.candidate;
+  const actual: CorpusActual = { terminal: result.terminal, reasonCode: result.reasonCode, institutionId: result.institutionId };
+  if (!c) return actual;
+  return {
+    ...actual,
+    direction: c.direction,
+    transactionType: c.transactionType,
+    subtype: c.subtype,
+    amount: formatMinorToDecimal(c.amountMinor, c.currency),
+    currency: c.currency,
+    transactionDate: c.transactionDate,
+    accountTail: c.accountTail,
+    referenceNumber: c.referenceNumber,
+    merchantKind: c.merchantKind,
+    merchantName: c.merchantName,
+    merchantId: c.merchantId,
+    paymentMethod: c.paymentMethod,
+  };
+};
+
+const runner: CorpusRunner | null = runCase;
 
 const ROOT = join(import.meta.dirname, '..');
 const CORPUS_DIR = join(ROOT, 'corpus');
@@ -102,13 +137,17 @@ const byProvenance = cases.reduce<Record<string, number>>((acc, testCase) => {
 console.log(`Corpus: ${cases.length} valid cases (${Object.entries(byProvenance).map(([k, v]) => `${k} ${v}`).join(', ')}).`);
 
 if (!runner) {
-  console.log('Pipeline not implemented yet (task T3.1): cases validated, none executed.');
+  console.log('Pipeline not wired: cases validated, none executed.');
   process.exit(0);
 }
 
-const baseline = new Set<string>(
-  (JSON.parse(readFileSync(BASELINE_FILE, 'utf8')) as { passing: string[] }).passing,
-);
+let baselineIds: string[] = [];
+try {
+  baselineIds = (JSON.parse(readFileSync(BASELINE_FILE, 'utf8')) as { passing: string[] }).passing;
+} catch {
+  // No baseline yet: every failure is reported as not yet passing.
+}
+const baseline = new Set<string>(baselineIds);
 const passing: string[] = [];
 const regressions: string[] = [];
 const newFailures: string[] = [];

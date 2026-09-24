@@ -21,14 +21,21 @@ describe('scoreEvidence', () => {
     expect(scoreEvidence({ ...strong, referencePresent: false, dateExtracted: false, templateMatched: true })).toBe('high');
   });
 
+  it('is high with only a date read from the message (salary, interest, cashback alerts)', () => {
+    expect(scoreEvidence({ ...strong, referencePresent: false })).toBe('high');
+  });
+
+  it('is high with only a reference, when the date fell back to the received time', () => {
+    expect(scoreEvidence({ ...strong, dateExtracted: false })).toBe('high');
+  });
+
   it('is high with a known merchant instead of a reference', () => {
     expect(scoreEvidence({ ...strong, referencePresent: false, merchantKnown: true })).toBe('high');
   });
 
   it.each([
     ['unknown institution', { institutionVerified: false }],
-    ['no reference or known merchant', { referencePresent: false }],
-    ['fallback date and no template', { dateExtracted: false }],
+    ['nothing read from the message corroborates it (fallback date, no reference, no known merchant, no template)', { referencePresent: false, dateExtracted: false }],
     ['fuzzy merchant match', { merchantFuzzy: true }],
   ])('drops to medium: %s', (_label, change) => {
     expect(scoreEvidence({ ...strong, ...change })).toBe('medium');

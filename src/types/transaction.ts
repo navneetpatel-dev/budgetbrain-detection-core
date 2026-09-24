@@ -83,12 +83,20 @@ export interface DetectedCandidate {
   merchantName: string | null;
   /** Knowledge-base merchant id when matched. */
   merchantId: string | null;
+  /** `brand` (knowledge base), `raw` (cleaned name), `p2p` (a person) or `none`. */
+  merchantKind: 'brand' | 'raw' | 'p2p' | 'none';
+  /** Normalized merchant key, for learned rules and exclusions. */
+  merchantKey: string | null;
   /** Standard taxonomy code (spec §16, gap-doc §6.9). */
   taxonomyCode: string | null;
   /** User category id, when a user rule or mapping resolved it. */
   categoryId: string | null;
+  /** Which tier of the category resolver answered (task T3.9). */
+  categorySource: 'rule' | 'knowledge_base' | 'mcc' | 'context' | 'fallback' | null;
   /** Calendar date `YYYY-MM-DD` in the institution's local time. */
   transactionDate: string;
+  /** When the message arrived (ISO 8601 with offset); part of the fingerprint for messages without a reference. */
+  receivedAt: string;
   confidenceTier: ConfidenceTier;
   reliability: {
     amount: FieldReliability;

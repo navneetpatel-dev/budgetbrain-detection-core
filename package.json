@@ -1,6 +1,6 @@
 {
   "name": "@budgetbrain/detection-core",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Platform-independent transaction detection pipeline shared by BudgetBrain mobile, backend and web.",
   "license": "UNLICENSED",
   "private": true,
@@ -41,11 +41,13 @@
       }
     },
     "./schema/knowledge-pack.schema.json": "./schema/knowledge-pack.schema.json",
+    "./packs/baseline/IN.json": "./packs/sample/IN.pack.json",
     "./package.json": "./package.json"
   },
   "files": [
     "dist",
-    "schema"
+    "schema",
+    "packs/sample/IN.pack.json"
   ],
   "engines": {
     "node": ">=20"
@@ -61,6 +63,7 @@
     "pack:validate": "tsx scripts/validate-pack.ts packs/sample/IN.pack.signed.json",
     "pack:sign": "tsx scripts/sign-pack.ts",
     "bench": "tsx scripts/bench.ts",
+    "bench:check": "tsx scripts/bench.ts --check",
     "check": "npm run typecheck && npm run lint && npm test && npm run build && npm run corpus && npm run pack:validate"
   },
   "devDependencies": {
