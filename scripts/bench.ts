@@ -17,6 +17,7 @@ import { canonicalJson } from '../src/pack/canonical';
 import { fromBase64, verifyKnowledgePack } from '../src/pack/signing';
 import { validateKnowledgePack } from '../src/pack/validate';
 import type { CorpusCase } from '../src/corpus/types';
+import { compilePack, processMessage } from '../src/pipeline';
 
 const ROOT = join(import.meta.dirname, '..');
 const corpusDir = join(ROOT, 'corpus', 'IN');
@@ -50,6 +51,16 @@ results.push(bench('pack canonicalJson (IN sample)', [signedPack.payload], (p) =
 results.push(bench('pack validate (IN sample)', [signedPack.payload], (p) => validateKnowledgePack(p), { warmup: 20, iterations: 200 }));
 results.push(bench('pack verify signature + validate (IN sample)', [signedPack], (p) => verifyKnowledgePack(p, keys), { warmup: 5, iterations: 50 }));
 
+// Parser v2 hot path (plan T3.14): budget p95 ≤ 1 ms per message in Node.
+const compiled = compilePack(signedPack.payload);
+results.push(bench('compilePack (IN sample)', [signedPack.payload], (p) => compilePack(p), { warmup: 20, iterations: 200 }));
+const pipeline = bench('parser v2 processMessage, full message', bodies, (m) => processMessage(m, compiled, { userId: 'user-1' }), {
+  warmup: 500,
+  iterations: 5000,
+});
+results.push(pipeline);
+const budgetMs = 1;
+
 const enginesDir = process.env.MOBILE_ENGINES_DIR;
 if (enginesDir) {
   const dir = resolve(enginesDir);
@@ -72,3 +83,7 @@ if (enginesDir) {
 
 console.log(formatBenchTable(results));
 console.log(`\nNode ${process.version}, ${process.platform}/${process.arch}, ${bodies.length} corpus messages.`);
+if (process.argv.includes('--check') && pipeline.p95Ms > budgetMs) {
+  console.error(`parser v2 p95 ${pipeline.p95Ms.toFixed(3)} ms is over the ${budgetMs} ms budget (plan §3.1, T3.14)`);
+  process.exit(1);
+}

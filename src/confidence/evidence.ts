@@ -9,8 +9,9 @@ const TIER_RANK: Readonly<Record<ConfidenceTier, number>> = { low: 0, medium: 1,
  * and the device calls it too, so both sides agree. It is deliberately conservative:
  *
  * - **high** (may be auto-created): a verified institution, exactly one amount candidate,
- *   unambiguous direction, no fuzzy merchant match, and either a matched template or an
- *   extracted date plus a reference number or known merchant.
+ *   unambiguous direction, no fuzzy merchant match, and at least one corroborating fact read
+ *   from the message itself: a matched template, a date, a reference number or a known
+ *   merchant. A date that fell back to the received time is not corroboration (gap F1).
  * - **medium** (needs review): the amount and direction are clear but something is missing.
  * - **low** (never created): the amount or the direction is not clear.
  */
@@ -19,8 +20,7 @@ export function scoreEvidence(evidence: DetectionEvidence): ConfidenceTier {
     return 'low';
   }
   const corroborated =
-    evidence.templateMatched ||
-    (evidence.dateExtracted && (evidence.referencePresent || evidence.merchantKnown));
+    evidence.templateMatched || evidence.dateExtracted || evidence.referencePresent || evidence.merchantKnown;
   if (evidence.institutionVerified && corroborated && !evidence.merchantFuzzy) {
     return 'high';
   }

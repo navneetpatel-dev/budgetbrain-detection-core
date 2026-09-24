@@ -29,7 +29,9 @@ jobs:
             echo "dist must not import external modules"; exit 1
           fi
       - run: npm run corpus
+      - name: Corpus inside the Hermes engine (plan T3.1)
+        run: npm run corpus:hermes
       - run: npm run pack:validate
-      - name: Benchmark (report only)
+      - name: Benchmark (parser v2 p95 must stay under 1 ms, plan T3.14)
         if: matrix.node == 22
-        run: npm run bench >> "$GITHUB_STEP_SUMMARY"
+        run: npm run bench:check >> "$GITHUB_STEP_SUMMARY"

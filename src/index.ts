@@ -26,3 +26,6 @@ export {
   fromBase64,
   type TrustedKeys,
 } from './pack/signing';
+
+// Parser v2 (Phase 3): pure pipeline over a compiled knowledge pack.
+export * from './pipeline';

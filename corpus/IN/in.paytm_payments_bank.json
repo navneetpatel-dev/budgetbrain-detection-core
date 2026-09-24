@@ -13,16 +13,18 @@
       "source": "android_sms"
     },
     "expected": {
-      "terminal": "CREATED",
+      "terminal": "NEEDS_REVIEW",
       "direction": "CREDIT",
       "transactionType": "transfer",
       "amount": "1000.00",
       "currency": "INR",
-      "subtype": "wallet_topup"
+      "subtype": "wallet_topup",
+      "reasonCode": "medium_confidence"
     },
     "gaps": [
       "C1"
-    ]
+    ],
+    "notes": "No date, reference or known merchant in the message, so nothing corroborates it: review, not auto-add (gap F1)."
   },
   {
     "id": "in.paytm_payments_bank.collect_request",

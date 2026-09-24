@@ -1,6 +1,6 @@
 {
   "name": "@budgetbrain/detection-core",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Platform-independent transaction detection pipeline shared by BudgetBrain mobile, backend and web.",
   "license": "UNLICENSED",
   "private": true,
@@ -41,11 +41,13 @@
       }
     },
     "./schema/knowledge-pack.schema.json": "./schema/knowledge-pack.schema.json",
+    "./packs/baseline/IN.json": "./packs/sample/IN.pack.json",
     "./package.json": "./package.json"
   },
   "files": [
     "dist",
-    "schema"
+    "schema",
+    "packs/sample/IN.pack.json"
   ],
   "engines": {
     "node": ">=20"
@@ -61,17 +63,23 @@
     "pack:validate": "tsx scripts/validate-pack.ts packs/sample/IN.pack.signed.json",
     "pack:sign": "tsx scripts/sign-pack.ts",
     "bench": "tsx scripts/bench.ts",
-    "check": "npm run typecheck && npm run lint && npm test && npm run build && npm run corpus && npm run pack:validate"
+    "bench:check": "tsx scripts/bench.ts --check",
+    "check": "npm run typecheck && npm run lint && npm test && npm run build && npm run corpus && npm run pack:validate",
+    "corpus:hermes": "node scripts/hermes-corpus.mjs"
   },
   "devDependencies": {
+    "@babel/core": "^8.0.6",
+    "@babel/plugin-transform-classes": "^8.0.5",
     "@eslint/js": "^9.39.0",
     "@noble/curves": "^2.4.0",
     "@noble/hashes": "^2.4.0",
     "@types/node": "^22.19.0",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
+    "esbuild": "^0.28.2",
     "eslint": "^9.39.0",
     "eslint-plugin-regexp": "^2.10.0",
+    "hermes-engine-cli": "^0.12.0",
     "tsup": "^8.5.1",
     "tsx": "^4.20.0",
     "typescript": "~5.9.3",
