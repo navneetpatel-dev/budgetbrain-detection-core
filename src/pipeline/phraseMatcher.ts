@@ -12,10 +12,13 @@ export interface PhraseMatch {
  */
 export class PhraseMatcher {
   private readonly regex: RegExp | null;
+  /** The phrases, lower-cased and de-duplicated, longest first. */
+  readonly phrases: readonly string[];
 
   constructor(phrases: readonly string[]) {
     const unique = [...new Set(phrases.map((p) => p.trim().toLowerCase()).filter(Boolean))];
     unique.sort((a, b) => b.length - a.length);
+    this.phrases = unique;
     this.regex = unique.length > 0 ? new RegExp(unique.map((p) => escapeRegExp(p).replace(/ /g, '\\s+')).join('|'), 'gi') : null;
   }
 
