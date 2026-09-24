@@ -1,3 +1,5 @@
+import type { SyncItemResultStatus } from './transaction';
+
 /**
  * Local lifecycle of a message through the pipeline (spec §24, task T2.10).
  * Only the state and a reason code are stored; never the message text.
@@ -37,7 +39,7 @@ export const LIFECYCLE_TRANSITIONS: Readonly<Record<LifecycleState, readonly Lif
   DEDUP_CHECKED: ['CREATED', 'NEEDS_REVIEW', 'IGNORED'],
   CREATED: ['SYNC_PENDING'],
   NEEDS_REVIEW: ['SYNC_PENDING', 'IGNORED'],
-  SYNC_PENDING: ['SYNCED', 'SYNC_PENDING'],
+  SYNC_PENDING: ['SYNCED', 'SYNC_PENDING', 'IGNORED'],
   SYNCED: [],
   PARSE_FAILED: ['IGNORED'],
   DUPLICATE: ['IGNORED'],
@@ -47,6 +49,14 @@ export const LIFECYCLE_TRANSITIONS: Readonly<Record<LifecycleState, readonly Lif
 
 export function canTransition(from: LifecycleState, to: LifecycleState): boolean {
   return LIFECYCLE_TRANSITIONS[from].includes(to);
+}
+
+/** Throws when `from -> to` is not an allowed transition. Returns `to` so callers can assign it. */
+export function assertTransition(from: LifecycleState, to: LifecycleState): LifecycleState {
+  if (!canTransition(from, to)) {
+    throw new Error(`Invalid lifecycle transition ${from} -> ${to}`);
+  }
+  return to;
 }
 
 /**
@@ -86,5 +96,31 @@ export const REASON_CODES = [
   'possible_manual_duplicate',
   // Success
   'auto_created',
+  // Sync
+  'server_rejected',
 ] as const;
 export type ReasonCode = (typeof REASON_CODES)[number];
+
+export interface SyncOutcome {
+  state: Extract<LifecycleState, 'SYNCED' | 'IGNORED'>;
+  reason: ReasonCode | null;
+  /** The server kept the item for the user to review (it lives in the server review queue). */
+  awaitingReview: boolean;
+}
+
+/**
+ * Where a SYNC_PENDING item goes once the server answers for it. Review happens on the
+ * server, so `needs_review` is still SYNCED locally; a rejected item is never retried.
+ */
+export function lifecycleForSyncResult(status: SyncItemResultStatus): SyncOutcome {
+  switch (status) {
+    case 'created':
+      return { state: 'SYNCED', reason: 'auto_created', awaitingReview: false };
+    case 'needs_review':
+      return { state: 'SYNCED', reason: null, awaitingReview: true };
+    case 'already_synced':
+      return { state: 'SYNCED', reason: 'duplicate_fingerprint', awaitingReview: false };
+    case 'validation_error':
+      return { state: 'IGNORED', reason: 'server_rejected', awaitingReview: false };
+  }
+}
