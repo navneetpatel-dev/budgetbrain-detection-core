@@ -13,6 +13,7 @@ import {
   parseAmount,
   processBatch,
   processMessage,
+  rawDomain,
   resolveMerchantName,
   resolveFromContent,
   resolveSender,
@@ -204,6 +205,44 @@ describe('merchant resolver (T3.8)', () => {
     expect(jaroWinkler('zomato', 'zomatto')).toBeGreaterThan(0.92);
     expect(resolveMerchantName('ZOMATTO', pack, 'IN')).toMatchObject({ merchantId: 'm.zomato', fuzzy: true });
     expect(resolveMerchantName('ZEBRONICS', pack, 'IN').kind).toBe('raw');
+  });
+
+  it('never matches fuzzily across brands: different Wikidata ids or domains (T3.8)', () => {
+    const merchant = (id: string, name: string, extra: Partial<KnowledgePack['merchants'][number]> = {}) => ({
+      id, name, country: 'IN', taxonomyCode: 'GENERAL_MERCHANDISE', ...extra,
+    });
+    const withMerchants = (merchants: KnowledgePack['merchants'][number][]) =>
+      compilePack({
+        ...rawPack,
+        merchants: [...rawPack.merchants, ...merchants],
+        merchantAliases: [...rawPack.merchantAliases, ...merchants.map((m) => ({ merchantId: m.id, alias: m.name.toLowerCase() }))],
+      });
+
+    // Two close brands with different Wikidata ids: "kalyani" is as near to either, so neither is guessed.
+    const twoBrands = withMerchants([
+      merchant('m.kalyana', 'Kalyana', { wikidataId: 'Q900001' }),
+      merchant('m.kalyane', 'Kalyane', { wikidataId: 'Q900002' }),
+    ]);
+    expect(resolveMerchantName('KALYANI', twoBrands, 'IN')).toMatchObject({ kind: 'raw', merchantId: null });
+
+    // Two catalog entries of one brand (same Wikidata id) are not a conflict.
+    const oneBrand = withMerchants([
+      merchant('m.kalyana', 'Kalyana', { wikidataId: 'Q900001' }),
+      merchant('m.kalyana_2', 'Kalyane', { wikidataId: 'Q900001' }),
+    ]);
+    expect(resolveMerchantName('KALYANI', oneBrand, 'IN')).toMatchObject({ kind: 'brand', fuzzy: true });
+
+    // The sample pack's Flipkart and a new "Flipkarts" are two brands: "FLIPKART5" is close to both.
+    const nearFlipkart = withMerchants([merchant('m.flipkarts', 'Flipkarts', { domain: 'flipkarts.com' })]);
+    expect(resolveMerchantName('FLIPKART5', nearFlipkart, 'IN')).toMatchObject({ kind: 'raw', merchantId: null });
+
+    // A name carrying its own domain never matches a brand with another domain.
+    const withDomain = withMerchants([merchant('m.qwikmarts', 'Qwikmarts', { domain: 'qwikmarts.com' })]);
+    expect(resolveMerchantName('QWIKMART5', withDomain, 'IN')).toMatchObject({ merchantId: 'm.qwikmarts', fuzzy: true });
+    expect(resolveMerchantName('QWIKMART5.IN', withDomain, 'IN')).toMatchObject({ kind: 'raw', merchantId: null });
+    expect(resolveMerchantName('WWW.QWIKMARTS.COM', withDomain, 'IN')).toMatchObject({ merchantId: 'm.qwikmarts', fuzzy: false });
+    expect(rawDomain('POS 1234 NETFLIX.COM')).toBe('netflix.com');
+    expect(rawDomain('SWIGGY')).toBeNull();
   });
 
   it('a VPA gives a clean name, not the text around it (gap X4)', () => {

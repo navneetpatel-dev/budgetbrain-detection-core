@@ -1,6 +1,6 @@
 {
   "name": "@budgetbrain/detection-core",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Platform-independent transaction detection pipeline shared by BudgetBrain mobile, backend and web.",
   "license": "UNLICENSED",
   "private": true,
