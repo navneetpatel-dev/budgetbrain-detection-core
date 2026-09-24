@@ -14,6 +14,7 @@ import {
   processBatch,
   processMessage,
   resolveMerchantName,
+  resolveFromContent,
   resolveSender,
   type UserContext,
 } from '../src/pipeline';
@@ -41,6 +42,39 @@ describe('sender resolver (T3.2)', () => {
     expect(resolveSender('alerts@icicibank.com', 'email', pack).institutionId).toBe('in.icici_bank');
     expect(resolveSender('noreply@alerts.hdfcbank.net', 'email', pack).institutionId).toBe('in.hdfc_bank');
     expect(resolveSender('net.one97.paytm', 'notification', pack).institutionId).toBe('in.paytm_payments_bank');
+  });
+});
+
+describe('content signal for unknown SMS senders (T3.2)', () => {
+  const BODY = 'Rs.1,250.00 debited from your HDFC Bank a/c **1234 on 23-09-26 to VPA swiggy@icici. Ref 425612345678';
+
+  it('recognises one institution named in the body, unverified', () => {
+    expect(resolveFromContent('JM-NEWHDR', BODY, 'android_sms', pack)).toMatchObject({ institutionId: 'in.hdfc_bank', verified: false });
+    expect(resolveFromContent('', 'IMPS to a/c 1234 IFSC SBIN0001234 of Rs 500 done', 'pasted_sms', pack)).toMatchObject({
+      institutionId: 'in.state_bank_of_india',
+    });
+    expect(resolveFromContent('AX-XYZ', 'Rs 100 credited to your Kotak Mahindra Bank Ltd a/c', 'android_sms', pack)?.institutionId).toBe(
+      'in.kotak_mahindra_bank'
+    );
+  });
+
+  it('refuses phone-number senders, several banks, one-word names, other sources and partial words', () => {
+    expect(resolveFromContent('+919876543210', BODY, 'android_sms', pack)).toBeNull();
+    expect(resolveFromContent('98765 43210', BODY, 'android_sms', pack)).toBeNull();
+    expect(resolveFromContent('JM-NEWHDR', 'Transfer from HDFC Bank to Axis Bank of Rs 500', 'android_sms', pack)).toBeNull();
+    expect(resolveFromContent('JM-NEWHDR', 'Rs 500 paid via SBI card', 'android_sms', pack)).toBeNull();
+    expect(resolveFromContent('alerts@unknown.com', BODY, 'email', pack)).toBeNull();
+    expect(resolveFromContent('JM-NEWHDR', 'Rs 500 at XHDFC BANKS store', 'android_sms', pack)).toBeNull();
+  });
+
+  it('sends such a message to review, never adds it automatically', () => {
+    const result = processMessage(sms(BODY, 'JM-NEWHDR'), pack, ctx);
+    expect(result.institutionId).toBe('in.hdfc_bank');
+    expect(result.candidate?.evidence.institutionVerified).toBe(false);
+    expect(result.candidate?.confidenceTier).not.toBe('high');
+    expect(result.terminal).toBe('NEEDS_REVIEW');
+    // A phone number with the same text is still ignored.
+    expect(processMessage(sms(BODY, '+919876543210'), pack, ctx)).toMatchObject({ terminal: 'IGNORED', reasonCode: 'unknown_sender' });
   });
 });
 

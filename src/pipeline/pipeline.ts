@@ -16,7 +16,7 @@ import { isAllowedDirectionType } from '../confidence/evidence';
 import type { CompiledPack, CompiledTemplate } from './compile';
 import { resolveCategory } from './category';
 import { NO_MERCHANT, isPersonalVpa, looksLikePerson, resolveMerchantName, type ResolvedMerchant } from './merchant';
-import { resolveSender } from './sender';
+import { resolveFromContent, resolveSender } from './sender';
 import { satisfiesRange } from './semver';
 import { MAX_BODY_CHARS, blank, collapseSpaces, isWordChar, titleCase } from './text';
 import { assignRoles, findAccounts, findDates, findMoney, findReference, findVpas, type AccountToken, type MoneyToken } from './tokens';
@@ -260,8 +260,12 @@ function matchTemplate(pack: CompiledPack, institutionId: string | null, body: s
  * manual-duplicate check → confidence. Pure: no storage, network or clock beyond the inputs.
  */
 export function processMessage(message: NormalizedMessage, pack: CompiledPack, ctx: UserContext): PipelineResult {
-  // 1. Sender (T3.2). Unknown senders never create anything (gap E2, E5).
-  const sender = resolveSender(message.sender, message.source, pack);
+  // 1. Sender (T3.2). An unknown SMS sender gets a second chance from the body (bank name or
+  // IFSC, unverified: review only); otherwise unknown senders never create anything (gap E2, E5).
+  const bySender = resolveSender(message.sender, message.source, pack);
+  const sender = bySender.institutionId
+    ? bySender
+    : (resolveFromContent(message.sender, message.body, message.source, pack) ?? bySender);
   const institutionId = sender.institutionId;
   if (!institutionId) return ignored({ stage: 'INELIGIBLE', reason: 'unknown_sender' }, null);
   const country = pack.institutions.get(institutionId)?.country ?? null;

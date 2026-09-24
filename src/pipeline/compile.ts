@@ -30,6 +30,12 @@ export interface CompiledPack {
   smsHeaders: Map<string, string>;
   exactSenders: Map<string, string>;
   emailDomains: Map<string, string>;
+  /**
+   * Content signal (plan T3.2): distinctive multi-word institution names (upper case, e.g.
+   * `HDFC BANK`), each naming exactly one institution, and IFSC-style 4-letter prefixes.
+   */
+  contentNames: { needle: string; institutionId: string }[];
+  ifscPrefixes: Map<string, string>;
   lexicon: Record<LexiconClass, PhraseMatcher>;
   templatesByInstitution: Map<string, CompiledTemplate[]>;
   merchants: Map<string, PackMerchant>;
@@ -117,6 +123,8 @@ export function compilePack(packs: KnowledgePack | readonly KnowledgePack[]): Co
     smsHeaders: new Map(),
     exactSenders: new Map(),
     emailDomains: new Map(),
+    contentNames: [],
+    ifscPrefixes: new Map(),
     lexicon: {} as Record<LexiconClass, PhraseMatcher>,
     templatesByInstitution: new Map(),
     merchants: new Map(),
@@ -188,5 +196,35 @@ export function compilePack(packs: KnowledgePack | readonly KnowledgePack[]): Co
     .map(([symbol, codes]) => ({ symbol, codes: [...codes] }))
     .sort((a, b) => b.symbol.length - a.symbol.length);
   compiled.railMatchers = compiled.rails.map((rail) => ({ rail, matcher: new PhraseMatcher(rail.keywords) }));
+  buildContentSignal(compiled);
   return compiled;
+}
+
+/**
+ * Names an institution can be recognised by in a message body (plan T3.2): its name and display
+ * name, also without a trailing "Limited"/"Ltd", upper case with single spaces. Only names of two
+ * or more words count (one word such as "SBI" or "Paytm" appears in too many other messages),
+ * and a name two institutions share is dropped.
+ */
+function buildContentSignal(compiled: CompiledPack): void {
+  const owners = new Map<string, Set<string>>();
+  for (const institution of compiled.institutions.values()) {
+    for (const raw of [institution.name, institution.displayName]) {
+      if (!raw) continue;
+      const base = raw.toUpperCase().replace(/\s+/g, ' ').trim();
+      for (const name of [base, base.replace(/ (?:LIMITED|LTD\.?)$/, '')]) {
+        if (name.length < 6 || !name.includes(' ')) continue;
+        const set = owners.get(name) ?? new Set<string>();
+        set.add(institution.id);
+        owners.set(name, set);
+      }
+    }
+    const prefix = institution.codes?.ifscPrefix?.toUpperCase();
+    if (prefix && /^[A-Z]{4}$/.test(prefix)) compiled.ifscPrefixes.set(prefix, institution.id);
+  }
+  for (const [needle, ids] of owners) {
+    if (ids.size === 1) compiled.contentNames.push({ needle, institutionId: [...ids][0]! });
+  }
+  // Longest first, so "STATE BANK OF INDIA" is tried before a shorter name inside it.
+  compiled.contentNames.sort((a, b) => b.needle.length - a.needle.length);
 }

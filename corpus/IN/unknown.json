@@ -63,5 +63,23 @@
     "gaps": [
       "E2"
     ]
+  },
+  {
+    "id": "in.unknown.spoofed_bank_name_from_phone",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "unknown",
+    "language": "en",
+    "input": {
+      "id": "in.unknown.spoofed_bank_name_from_phone",
+      "sender": "+919000000002",
+      "body": "HDFC Bank: Rs 5,000.00 credited to your a/c **1234. Ref 426500001111",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "IGNORED",
+      "reasonCode": "unknown_sender"
+    }
   }
 ]

@@ -1,5 +1,6 @@
 import type { MessageSource } from '../types/message';
 import type { CompiledPack } from './compile';
+import { MAX_BODY_CHARS, isWordChar } from './text';
 
 export interface ResolvedSender {
   institutionId: string | null;
@@ -51,4 +52,49 @@ export function resolveSender(sender: string, source: MessageSource, pack: Compi
   const header = normalizeSmsHeader(sender);
   const hit = pack.smsHeaders.get(header) ?? pack.exactSenders.get(sender.trim().toLowerCase()) ?? null;
   return { institutionId: hit, verified: verified(hit), key: header };
+}
+
+/** A phone number: people (and spoofers) send from these; banks use registered headers. */
+const PHONE_NUMBER = /^\+?\d[\d\s-]{5,}$/;
+const IFSC = /\b([A-Z]{4})0[A-Z0-9]{6}\b/g;
+
+function containsWord(haystack: string, needle: string): boolean {
+  let from = 0;
+  for (;;) {
+    const at = haystack.indexOf(needle, from);
+    if (at < 0) return false;
+    const before = at === 0 ? '' : haystack[at - 1]!;
+    const after = haystack[at + needle.length] ?? '';
+    if (!isWordChar(before) && !isWordChar(after)) return true;
+    from = at + 1;
+  }
+}
+
+/**
+ * Second signal for SMS from a sender the pack doesn't know (plan T3.2): the body names exactly
+ * one institution, by an IFSC code or a distinctive multi-word name ("HDFC Bank"). Never for a
+ * phone-number sender. The institution is returned unverified, so the item is capped at medium
+ * confidence and always goes to review, never added automatically.
+ */
+export function resolveFromContent(
+  sender: string,
+  body: string,
+  source: MessageSource,
+  pack: CompiledPack
+): ResolvedSender | null {
+  if (source !== 'android_sms' && source !== 'pasted_sms') return null;
+  if (PHONE_NUMBER.test(sender.trim())) return null;
+  const text = body.slice(0, MAX_BODY_CHARS).toUpperCase().replace(/\s+/g, ' ');
+  const found = new Set<string>();
+  IFSC.lastIndex = 0;
+  let m: RegExpExecArray | null;
+  while ((m = IFSC.exec(text)) !== null) {
+    const id = pack.ifscPrefixes.get(m[1]!);
+    if (id) found.add(id);
+  }
+  for (const { needle, institutionId } of pack.contentNames) {
+    if (containsWord(text, needle)) found.add(institutionId);
+  }
+  if (found.size !== 1) return null;
+  return { institutionId: [...found][0]!, verified: false, key: normalizeSmsHeader(sender) };
 }

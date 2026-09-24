@@ -1,6 +1,6 @@
 export { compilePack, type CompiledPack, type CompiledTemplate } from './compile';
 export { processMessage, processBatch } from './pipeline';
-export { resolveSender, normalizeSmsHeader, type ResolvedSender } from './sender';
+export { resolveFromContent, resolveSender, normalizeSmsHeader, type ResolvedSender } from './sender';
 export { findMoney, findAccounts, findDates, findReference, findVpas, parseAmount } from './tokens';
 export {
   cleanMerchantName,
