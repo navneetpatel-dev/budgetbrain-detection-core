@@ -88,3 +88,21 @@ describe('computeFingerprint', () => {
     expect(() => computeFingerprint({ ...base, referenceNumber: null, receivedAt: 'yesterday' })).toThrow(RangeError);
   });
 });
+
+describe('utf8Bytes', () => {
+  it('matches TextEncoder, including the hand-written fallback', async () => {
+    const { utf8Bytes } = await import('../src/fingerprint/fingerprint');
+    const samples = ['plain', 'Rs ₹500 डेबिट', 'emoji 😀 end', 'lone \ud800 surrogate'];
+    const saved = globalThis.TextEncoder;
+    for (const sample of samples) {
+      const expected = Array.from(new saved().encode(sample));
+      expect(Array.from(utf8Bytes(sample))).toEqual(expected);
+      (globalThis as { TextEncoder?: unknown }).TextEncoder = undefined;
+      try {
+        expect(Array.from(utf8Bytes(sample))).toEqual(expected);
+      } finally {
+        globalThis.TextEncoder = saved;
+      }
+    }
+  });
+});
