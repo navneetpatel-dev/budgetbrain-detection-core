@@ -1,0 +1,67 @@
+[
+  {
+    "id": "in.unknown.gapdoc_finote",
+    "provenance": "gap_doc",
+    "country": "IN",
+    "institution": "unknown",
+    "language": "en",
+    "input": {
+      "id": "in.unknown.gapdoc_finote",
+      "sender": "FINOTE",
+      "body": "You have a notification: Rs 999 paid present",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "IGNORED",
+      "reasonCode": "unknown_sender"
+    },
+    "gaps": [
+      "E3",
+      "E5"
+    ]
+  },
+  {
+    "id": "in.unknown.gapdoc_personal_sms",
+    "provenance": "gap_doc",
+    "country": "IN",
+    "institution": "unknown",
+    "language": "en",
+    "input": {
+      "id": "in.unknown.gapdoc_personal_sms",
+      "sender": "+919000000001",
+      "body": "Hey I sent you Rs 500 yesterday, received?",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "IGNORED",
+      "reasonCode": "unknown_sender"
+    },
+    "gaps": [
+      "E2"
+    ]
+  },
+  {
+    "id": "in.unknown.bank_like_unknown_sender",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "unknown",
+    "language": "en",
+    "input": {
+      "id": "in.unknown.bank_like_unknown_sender",
+      "sender": "VM-ABCDEF",
+      "body": "Rs 5,000.00 debited from your a/c XX1234 on 23-09-26. Avl Bal Rs 1,000.00",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "IGNORED",
+      "reasonCode": "unknown_sender"
+    },
+    "notes": "Unknown senders never create transactions, even with bank-like wording.",
+    "gaps": [
+      "E2"
+    ]
+  }
+]

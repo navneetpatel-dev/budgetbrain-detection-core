@@ -1,0 +1,145 @@
+[
+  {
+    "id": "in.kotak_mahindra_bank.gapdoc_kirana",
+    "provenance": "gap_doc",
+    "country": "IN",
+    "institution": "in.kotak_mahindra_bank",
+    "language": "en",
+    "input": {
+      "id": "in.kotak_mahindra_bank.gapdoc_kirana",
+      "sender": "VM-KOTAKB",
+      "body": "Rs 300 debited from Kotak a/c X9876 at local kirana store on 23/09/2026",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "DEBIT",
+      "transactionType": "expense",
+      "amount": "300.00",
+      "currency": "INR",
+      "transactionDate": "2026-09-23",
+      "accountTail": "9876",
+      "merchantKind": "raw",
+      "merchantName": "Local Kirana Store",
+      "merchantId": null
+    },
+    "notes": "Must not be force-matched to a brand.",
+    "gaps": [
+      "M1"
+    ]
+  },
+  {
+    "id": "in.kotak_mahindra_bank.multiple_amounts",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.kotak_mahindra_bank",
+    "language": "en",
+    "input": {
+      "id": "in.kotak_mahindra_bank.multiple_amounts",
+      "sender": "VM-KOTAKB",
+      "body": "Rs 500 and Rs 300 debited from Kotak a/c X9876 on 23/09/2026 at CITY MART",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "NEEDS_REVIEW",
+      "reasonCode": "multiple_amounts"
+    },
+    "gaps": [
+      "X2"
+    ]
+  },
+  {
+    "id": "in.kotak_mahindra_bank.one_decimal",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.kotak_mahindra_bank",
+    "language": "en",
+    "input": {
+      "id": "in.kotak_mahindra_bank.one_decimal",
+      "sender": "VM-KOTAKB",
+      "body": "Rs.1250.5 debited from Kotak a/c X9876 on 23/09/2026 to ZOMATO. UPI Ref 427912345678",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "DEBIT",
+      "transactionType": "expense",
+      "amount": "1250.50",
+      "currency": "INR",
+      "transactionDate": "2026-09-23",
+      "accountTail": "9876",
+      "referenceNumber": "427912345678",
+      "merchantKind": "brand",
+      "merchantId": "m.zomato",
+      "paymentMethod": "upi"
+    },
+    "gaps": [
+      "X3"
+    ]
+  },
+  {
+    "id": "in.kotak_mahindra_bank.imps_sent",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.kotak_mahindra_bank",
+    "language": "en",
+    "input": {
+      "id": "in.kotak_mahindra_bank.imps_sent",
+      "sender": "VM-KOTAKB",
+      "body": "Rs 3,000.00 sent via IMPS from Kotak a/c X9876 to a/c XX2222 (NIKHIL V) on 23/09/2026. IMPS Ref 426712345678",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "DEBIT",
+      "transactionType": "expense",
+      "amount": "3000.00",
+      "currency": "INR",
+      "subtype": "p2p",
+      "transactionDate": "2026-09-23",
+      "accountTail": "9876",
+      "referenceNumber": "426712345678",
+      "merchantKind": "p2p",
+      "paymentMethod": "bank_transfer"
+    }
+  },
+  {
+    "id": "in.kotak_mahindra_bank.imps_to_own",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.kotak_mahindra_bank",
+    "language": "en",
+    "input": {
+      "id": "in.kotak_mahindra_bank.imps_to_own",
+      "sender": "VM-KOTAKB",
+      "body": "Rs 3,000.00 sent via IMPS from Kotak a/c X9876 to a/c XX2222 (NIKHIL V) on 23/09/2026. IMPS Ref 426712345679",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "context": {
+      "ownAccountTails": [
+        "9876",
+        "2222"
+      ]
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "DEBIT",
+      "transactionType": "transfer",
+      "amount": "3000.00",
+      "currency": "INR",
+      "subtype": "self_transfer",
+      "accountTail": "9876",
+      "referenceNumber": "426712345679",
+      "paymentMethod": "bank_transfer"
+    },
+    "notes": "Same wording as imps_sent, but the payee account is the user's own.",
+    "gaps": [
+      "C1"
+    ]
+  }
+]

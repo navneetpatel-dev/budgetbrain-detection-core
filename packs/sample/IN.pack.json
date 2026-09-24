@@ -1,0 +1,705 @@
+{
+  "meta": {
+    "schemaVersion": 1,
+    "packVersion": 1,
+    "country": "IN",
+    "generatedAt": "2026-09-24T00:00:00Z",
+    "minCoreVersion": "0.1.0"
+  },
+  "institutions": [
+    {
+      "id": "in.hdfc_bank",
+      "name": "HDFC Bank Limited",
+      "displayName": "HDFC Bank",
+      "country": "IN",
+      "type": "bank",
+      "bic": "HDFCINBB",
+      "codes": {
+        "ifscPrefix": "HDFC"
+      },
+      "domains": [
+        "hdfcbank.com"
+      ],
+      "verified": true
+    },
+    {
+      "id": "in.icici_bank",
+      "name": "ICICI Bank Limited",
+      "displayName": "ICICI Bank",
+      "country": "IN",
+      "type": "bank",
+      "bic": "ICICINBB",
+      "codes": {
+        "ifscPrefix": "ICIC"
+      },
+      "domains": [
+        "icicibank.com"
+      ],
+      "verified": true
+    },
+    {
+      "id": "in.state_bank_of_india",
+      "name": "State Bank of India",
+      "displayName": "SBI",
+      "country": "IN",
+      "type": "bank",
+      "bic": "SBININBB",
+      "codes": {
+        "ifscPrefix": "SBIN"
+      },
+      "domains": [
+        "sbi.co.in"
+      ],
+      "verified": true
+    },
+    {
+      "id": "in.axis_bank",
+      "name": "Axis Bank Limited",
+      "displayName": "Axis Bank",
+      "country": "IN",
+      "type": "bank",
+      "bic": "AXISINBB",
+      "codes": {
+        "ifscPrefix": "UTIB"
+      },
+      "domains": [
+        "axisbank.com"
+      ],
+      "verified": true
+    },
+    {
+      "id": "in.kotak_mahindra_bank",
+      "name": "Kotak Mahindra Bank Limited",
+      "displayName": "Kotak Mahindra Bank",
+      "country": "IN",
+      "type": "bank",
+      "bic": "KKBKINBB",
+      "codes": {
+        "ifscPrefix": "KKBK"
+      },
+      "domains": [
+        "kotak.com"
+      ],
+      "verified": true
+    },
+    {
+      "id": "in.paytm_payments_bank",
+      "name": "Paytm Payments Bank Limited",
+      "displayName": "Paytm Payments Bank",
+      "country": "IN",
+      "type": "wallet",
+      "codes": {
+        "ifscPrefix": "PYTM"
+      },
+      "domains": [
+        "paytmbank.com"
+      ],
+      "verified": true
+    }
+  ],
+  "senders": [
+    {
+      "institutionId": "in.hdfc_bank",
+      "channel": "sms",
+      "match": "header",
+      "key": "HDFCBK"
+    },
+    {
+      "institutionId": "in.icici_bank",
+      "channel": "sms",
+      "match": "header",
+      "key": "ICICIB"
+    },
+    {
+      "institutionId": "in.state_bank_of_india",
+      "channel": "sms",
+      "match": "header",
+      "key": "SBIINB"
+    },
+    {
+      "institutionId": "in.state_bank_of_india",
+      "channel": "sms",
+      "match": "header",
+      "key": "SBIPSG"
+    },
+    {
+      "institutionId": "in.state_bank_of_india",
+      "channel": "sms",
+      "match": "header",
+      "key": "CBSSBI"
+    },
+    {
+      "institutionId": "in.axis_bank",
+      "channel": "sms",
+      "match": "header",
+      "key": "AXISBK"
+    },
+    {
+      "institutionId": "in.kotak_mahindra_bank",
+      "channel": "sms",
+      "match": "header",
+      "key": "KOTAKB"
+    },
+    {
+      "institutionId": "in.paytm_payments_bank",
+      "channel": "sms",
+      "match": "header",
+      "key": "PAYTMB"
+    },
+    {
+      "institutionId": "in.hdfc_bank",
+      "channel": "email",
+      "match": "domain",
+      "key": "hdfcbank.net"
+    },
+    {
+      "institutionId": "in.paytm_payments_bank",
+      "channel": "notification",
+      "match": "exact",
+      "key": "net.one97.paytm"
+    },
+    {
+      "institutionId": "in.icici_bank",
+      "channel": "email",
+      "match": "domain",
+      "key": "icicibank.com"
+    }
+  ],
+  "lexicons": [
+    {
+      "language": "en",
+      "class": "debit_verbs",
+      "phrases": [
+        "debited",
+        "spent",
+        "paid",
+        "withdrawn",
+        "sent",
+        "purchase",
+        "debit"
+      ]
+    },
+    {
+      "language": "en",
+      "class": "credit_verbs",
+      "phrases": [
+        "credited",
+        "received",
+        "deposited",
+        "added"
+      ]
+    },
+    {
+      "language": "en",
+      "class": "refund",
+      "phrases": [
+        "refund",
+        "refunded"
+      ]
+    },
+    {
+      "language": "en",
+      "class": "reversal",
+      "phrases": [
+        "reversed",
+        "reversal"
+      ]
+    },
+    {
+      "language": "en",
+      "class": "cashback",
+      "phrases": [
+        "cashback"
+      ]
+    },
+    {
+      "language": "en",
+      "class": "transfer",
+      "phrases": [
+        "transferred",
+        "transfer",
+        "sent to",
+        "added to your wallet"
+      ]
+    },
+    {
+      "language": "en",
+      "class": "self_transfer",
+      "phrases": [
+        "to own a/c",
+        "self transfer",
+        "between your accounts"
+      ]
+    },
+    {
+      "language": "en",
+      "class": "bill_payment",
+      "phrases": [
+        "payment received towards your credit card",
+        "payment of",
+        "bill payment"
+      ]
+    },
+    {
+      "language": "en",
+      "class": "failed",
+      "phrases": [
+        "declined",
+        "failed",
+        "unsuccessful",
+        "cancelled",
+        "canceled"
+      ]
+    },
+    {
+      "language": "en",
+      "class": "otp_markers",
+      "phrases": [
+        "otp",
+        "one time password",
+        "verification code",
+        "security code"
+      ]
+    },
+    {
+      "language": "en",
+      "class": "promo_markers",
+      "phrases": [
+        "pre-approved",
+        "apply now",
+        "limited period offer",
+        "voucher",
+        "click here to"
+      ]
+    },
+    {
+      "language": "en",
+      "class": "non_transaction_notice",
+      "phrases": [
+        "login alert",
+        "password changed",
+        "e-statement",
+        "kyc update",
+        "card dispatched"
+      ]
+    },
+    {
+      "language": "en",
+      "class": "future_or_request",
+      "phrases": [
+        "will be debited",
+        "collect request",
+        "mandate",
+        "is due on",
+        "requested money"
+      ]
+    },
+    {
+      "language": "en",
+      "class": "balance",
+      "phrases": [
+        "avl bal",
+        "available balance",
+        "avbl bal",
+        "bal",
+        "balance"
+      ]
+    },
+    {
+      "language": "en",
+      "class": "limit",
+      "phrases": [
+        "avl lmt",
+        "available limit",
+        "credit limit"
+      ]
+    },
+    {
+      "language": "en",
+      "class": "safety_footer",
+      "phrases": [
+        "never share your otp",
+        "do not share your otp",
+        "not you? call",
+        "if not done by you"
+      ]
+    },
+    {
+      "language": "en",
+      "class": "account_markers",
+      "phrases": [
+        "a/c",
+        "acct",
+        "account",
+        "card",
+        "ending"
+      ]
+    },
+    {
+      "language": "en",
+      "class": "reference_markers",
+      "phrases": [
+        "ref",
+        "ref no",
+        "utr",
+        "rrn",
+        "upi ref",
+        "txn id"
+      ]
+    },
+    {
+      "language": "hi",
+      "class": "debit_verbs",
+      "phrases": [
+        "डेबिट",
+        "खर्च"
+      ]
+    },
+    {
+      "language": "hi",
+      "class": "credit_verbs",
+      "phrases": [
+        "क्रेडिट",
+        "जमा"
+      ]
+    },
+    {
+      "language": "hi",
+      "class": "balance",
+      "phrases": [
+        "उपलब्ध शेष",
+        "शेष"
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "in.hdfc_bank.upi_debit.v1",
+      "institutionId": "in.hdfc_bank",
+      "version": 1,
+      "language": "en",
+      "skeleton": "Sent Rs.<AMT> From HDFC Bank A/C *<ACCT> To <NAME> On <DATE> Ref <REF> Not You? Call <NUM>/SMS BLOCK UPI to <NUM>",
+      "fields": [
+        "amount",
+        "account",
+        "counterparty",
+        "date",
+        "reference",
+        "ignore",
+        "ignore"
+      ],
+      "direction": "DEBIT",
+      "transactionType": "expense",
+      "paymentMethod": "upi",
+      "dateOrder": "DMY"
+    },
+    {
+      "id": "in.hdfc_bank.card_spend.v1",
+      "institutionId": "in.hdfc_bank",
+      "version": 1,
+      "language": "en",
+      "skeleton": "Rs <AMT> spent on HDFC Bank Card <ACCT> at <NAME> on <DATE>. Avl Lmt Rs <AMT>",
+      "fields": [
+        "amount",
+        "account",
+        "merchant",
+        "date",
+        "limit"
+      ],
+      "direction": "DEBIT",
+      "transactionType": "expense",
+      "paymentMethod": "card",
+      "dateOrder": "YMD"
+    }
+  ],
+  "merchants": [
+    {
+      "id": "m.swiggy",
+      "name": "Swiggy",
+      "country": "IN",
+      "domain": "swiggy.com",
+      "taxonomyCode": "FOOD_AND_DRINK.RESTAURANT",
+      "mcc": "5814"
+    },
+    {
+      "id": "m.zomato",
+      "name": "Zomato",
+      "country": "IN",
+      "domain": "zomato.com",
+      "taxonomyCode": "FOOD_AND_DRINK.RESTAURANT",
+      "mcc": "5814"
+    },
+    {
+      "id": "m.amazon",
+      "name": "Amazon",
+      "country": null,
+      "wikidataId": "Q3884",
+      "domain": "amazon.com",
+      "taxonomyCode": "GENERAL_MERCHANDISE.ONLINE_MARKETPLACES",
+      "mcc": "5399"
+    },
+    {
+      "id": "m.dmart",
+      "name": "DMart",
+      "country": "IN",
+      "domain": "dmartindia.com",
+      "taxonomyCode": "FOOD_AND_DRINK.GROCERIES",
+      "mcc": "5411"
+    },
+    {
+      "id": "m.uber",
+      "name": "Uber",
+      "country": null,
+      "wikidataId": "Q692400",
+      "domain": "uber.com",
+      "taxonomyCode": "TRANSPORTATION.TAXIS_AND_RIDE_SHARES",
+      "mcc": "4121"
+    },
+    {
+      "id": "m.netflix",
+      "name": "Netflix",
+      "country": null,
+      "wikidataId": "Q907311",
+      "domain": "netflix.com",
+      "taxonomyCode": "ENTERTAINMENT.STREAMING",
+      "mcc": "4899"
+    }
+  ],
+  "merchantAliases": [
+    {
+      "merchantId": "m.swiggy",
+      "alias": "swiggy"
+    },
+    {
+      "merchantId": "m.swiggy",
+      "alias": "bundl technologies",
+      "country": "IN"
+    },
+    {
+      "merchantId": "m.zomato",
+      "alias": "zomato"
+    },
+    {
+      "merchantId": "m.amazon",
+      "alias": "amazon"
+    },
+    {
+      "merchantId": "m.amazon",
+      "alias": "amzn mktp"
+    },
+    {
+      "merchantId": "m.amazon",
+      "alias": "amazon pay",
+      "country": "IN"
+    },
+    {
+      "merchantId": "m.dmart",
+      "alias": "dmart",
+      "country": "IN"
+    },
+    {
+      "merchantId": "m.dmart",
+      "alias": "avenue supermarts",
+      "country": "IN"
+    },
+    {
+      "merchantId": "m.uber",
+      "alias": "uber"
+    },
+    {
+      "merchantId": "m.uber",
+      "alias": "uber india",
+      "country": "IN"
+    },
+    {
+      "merchantId": "m.netflix",
+      "alias": "netflix"
+    }
+  ],
+  "currencies": [
+    {
+      "code": "INR",
+      "minorUnits": 2,
+      "symbols": [
+        "₹",
+        "Rs",
+        "Rs.",
+        "INR"
+      ],
+      "decimalSeparator": ".",
+      "groupSeparator": ",",
+      "grouping": "indian"
+    },
+    {
+      "code": "USD",
+      "minorUnits": 2,
+      "symbols": [
+        "US$",
+        "USD",
+        "$"
+      ],
+      "ambiguousSymbols": [
+        "$"
+      ],
+      "decimalSeparator": ".",
+      "groupSeparator": ",",
+      "grouping": "standard"
+    }
+  ],
+  "paymentRails": [
+    {
+      "id": "upi",
+      "name": "UPI",
+      "paymentMethod": "upi",
+      "countries": [
+        "IN"
+      ],
+      "keywords": [
+        "upi",
+        "vpa"
+      ]
+    },
+    {
+      "id": "imps",
+      "name": "IMPS",
+      "paymentMethod": "bank_transfer",
+      "countries": [
+        "IN"
+      ],
+      "keywords": [
+        "imps"
+      ]
+    },
+    {
+      "id": "neft",
+      "name": "NEFT",
+      "paymentMethod": "bank_transfer",
+      "countries": [
+        "IN"
+      ],
+      "keywords": [
+        "neft"
+      ]
+    },
+    {
+      "id": "rtgs",
+      "name": "RTGS",
+      "paymentMethod": "bank_transfer",
+      "countries": [
+        "IN"
+      ],
+      "keywords": [
+        "rtgs"
+      ]
+    },
+    {
+      "id": "card",
+      "name": "Card",
+      "paymentMethod": "card",
+      "keywords": [
+        "card",
+        "pos"
+      ]
+    },
+    {
+      "id": "atm",
+      "name": "ATM",
+      "paymentMethod": "cash",
+      "keywords": [
+        "atm",
+        "cash withdrawal"
+      ]
+    }
+  ],
+  "taxonomy": [
+    {
+      "code": "FOOD_AND_DRINK",
+      "name": "Food & Drink"
+    },
+    {
+      "code": "FOOD_AND_DRINK.RESTAURANT",
+      "name": "Restaurants & Delivery",
+      "parent": "FOOD_AND_DRINK"
+    },
+    {
+      "code": "FOOD_AND_DRINK.GROCERIES",
+      "name": "Groceries",
+      "parent": "FOOD_AND_DRINK"
+    },
+    {
+      "code": "GENERAL_MERCHANDISE",
+      "name": "Shopping"
+    },
+    {
+      "code": "GENERAL_MERCHANDISE.ONLINE_MARKETPLACES",
+      "name": "Online Marketplaces",
+      "parent": "GENERAL_MERCHANDISE"
+    },
+    {
+      "code": "TRANSPORTATION",
+      "name": "Transportation"
+    },
+    {
+      "code": "TRANSPORTATION.TAXIS_AND_RIDE_SHARES",
+      "name": "Taxis & Ride Shares",
+      "parent": "TRANSPORTATION"
+    },
+    {
+      "code": "TRANSPORTATION.GAS",
+      "name": "Fuel",
+      "parent": "TRANSPORTATION"
+    },
+    {
+      "code": "ENTERTAINMENT",
+      "name": "Entertainment"
+    },
+    {
+      "code": "ENTERTAINMENT.STREAMING",
+      "name": "Streaming",
+      "parent": "ENTERTAINMENT"
+    },
+    {
+      "code": "RENT_AND_UTILITIES",
+      "name": "Utilities"
+    },
+    {
+      "code": "OTHER",
+      "name": "Other"
+    }
+  ],
+  "mcc": [
+    {
+      "mcc": "5812",
+      "taxonomyCode": "FOOD_AND_DRINK.RESTAURANT"
+    },
+    {
+      "mcc": "5814",
+      "taxonomyCode": "FOOD_AND_DRINK.RESTAURANT"
+    },
+    {
+      "mcc": "5411",
+      "taxonomyCode": "FOOD_AND_DRINK.GROCERIES"
+    },
+    {
+      "mcc": "5399",
+      "taxonomyCode": "GENERAL_MERCHANDISE.ONLINE_MARKETPLACES"
+    },
+    {
+      "mcc": "4121",
+      "taxonomyCode": "TRANSPORTATION.TAXIS_AND_RIDE_SHARES"
+    },
+    {
+      "mcc": "5541",
+      "taxonomyCode": "TRANSPORTATION.GAS"
+    },
+    {
+      "mcc": "4899",
+      "taxonomyCode": "ENTERTAINMENT.STREAMING"
+    },
+    {
+      "mcc": "4900",
+      "taxonomyCode": "RENT_AND_UTILITIES"
+    }
+  ],
+  "killSwitches": []
+}

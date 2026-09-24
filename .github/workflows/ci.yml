@@ -1,0 +1,35 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Backend runs Node 20; the build and tests must pass on both.
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - name: Built package has no runtime imports
+        run: |
+          if grep -E "require\(|from ['\"][^.]" dist/index.cjs dist/index.js | grep -v "^\s*//"; then
+            echo "dist must not import external modules"; exit 1
+          fi
+      - run: npm run corpus
+      - run: npm run pack:validate
+      - name: Benchmark (report only)
+        if: matrix.node == 22
+        run: npm run bench >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,72 @@
+[
+  {
+    "id": "in.paytm_payments_bank.gapdoc_wallet_topup",
+    "provenance": "gap_doc",
+    "country": "IN",
+    "institution": "in.paytm_payments_bank",
+    "language": "en",
+    "input": {
+      "id": "in.paytm_payments_bank.gapdoc_wallet_topup",
+      "sender": "BZ-PAYTMB",
+      "body": "Rs 1000 added to your Paytm Wallet from HDFC Bank a/c XX1234",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "CREDIT",
+      "transactionType": "transfer",
+      "amount": "1000.00",
+      "currency": "INR",
+      "subtype": "wallet_topup"
+    },
+    "gaps": [
+      "C1"
+    ]
+  },
+  {
+    "id": "in.paytm_payments_bank.collect_request",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.paytm_payments_bank",
+    "language": "en",
+    "input": {
+      "id": "in.paytm_payments_bank.collect_request",
+      "sender": "BZ-PAYTMB",
+      "body": "Rahul has requested money Rs 300 from you on UPI. Approve or decline in the app.",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "IGNORED",
+      "reasonCode": "future_or_request"
+    },
+    "gaps": [
+      "E8"
+    ]
+  },
+  {
+    "id": "in.paytm_payments_bank.wallet_payment",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.paytm_payments_bank",
+    "language": "en",
+    "input": {
+      "id": "in.paytm_payments_bank.wallet_payment",
+      "sender": "BZ-PAYTMB",
+      "body": "Paid Rs 180 to SWIGGY from Paytm Wallet. Txn ID 20260923112233. Updated balance Rs 820",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "DEBIT",
+      "transactionType": "expense",
+      "amount": "180.00",
+      "currency": "INR",
+      "merchantKind": "brand",
+      "merchantId": "m.swiggy",
+      "paymentMethod": "wallet"
+    }
+  }
+]

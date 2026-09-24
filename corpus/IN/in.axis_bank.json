@@ -1,0 +1,120 @@
+[
+  {
+    "id": "in.axis_bank.gapdoc_card_bill_credit",
+    "provenance": "gap_doc",
+    "country": "IN",
+    "institution": "in.axis_bank",
+    "language": "en",
+    "input": {
+      "id": "in.axis_bank.gapdoc_card_bill_credit",
+      "sender": "VM-AXISBK",
+      "body": "Payment of Rs 15,000 received towards your Axis Bank Credit Card XX4321. Thank you.",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "CREDIT",
+      "transactionType": "transfer",
+      "amount": "15000.00",
+      "currency": "INR",
+      "subtype": "card_bill",
+      "accountTail": "4321"
+    },
+    "notes": "Card bill payment is a transfer, never income.",
+    "gaps": [
+      "C1",
+      "C2"
+    ]
+  },
+  {
+    "id": "in.axis_bank.reversal_credit",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.axis_bank",
+    "language": "en",
+    "input": {
+      "id": "in.axis_bank.reversal_credit",
+      "sender": "VM-AXISBK",
+      "body": "INR 450.00 credited to A/c no. XX5678 on 23-09-2026 towards reversal of failed UPI txn. Ref 427812345678",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "CREDIT",
+      "transactionType": "refund",
+      "amount": "450.00",
+      "currency": "INR",
+      "subtype": "reversal",
+      "transactionDate": "2026-09-23",
+      "accountTail": "5678",
+      "referenceNumber": "427812345678"
+    }
+  },
+  {
+    "id": "in.axis_bank.login_alert",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.axis_bank",
+    "language": "en",
+    "input": {
+      "id": "in.axis_bank.login_alert",
+      "sender": "VM-AXISBK",
+      "body": "Login alert: Your Axis Bank internet banking was accessed on 23-09-26 at 09:58. Not you? Call 18001234567",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "IGNORED",
+      "reasonCode": "non_transaction_notice"
+    }
+  },
+  {
+    "id": "in.axis_bank.balance_first",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.axis_bank",
+    "language": "en",
+    "input": {
+      "id": "in.axis_bank.balance_first",
+      "sender": "VM-AXISBK",
+      "body": "Avl Bal Rs 20,500.00. Rs 1,250.00 debited from A/c XX5678 on 23-09-26 at UBER INDIA.",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "DEBIT",
+      "transactionType": "expense",
+      "amount": "1250.00",
+      "currency": "INR",
+      "transactionDate": "2026-09-23",
+      "accountTail": "5678",
+      "merchantKind": "brand",
+      "merchantId": "m.uber"
+    },
+    "notes": "Balance appears before the amount.",
+    "gaps": [
+      "X2"
+    ]
+  },
+  {
+    "id": "in.axis_bank.kyc_notice",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.axis_bank",
+    "language": "en",
+    "input": {
+      "id": "in.axis_bank.kyc_notice",
+      "sender": "VM-AXISBK",
+      "body": "Dear Customer, your KYC update is pending. Please visit the nearest branch before 30-09-26.",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "IGNORED",
+      "reasonCode": "non_transaction_notice"
+    }
+  }
+]

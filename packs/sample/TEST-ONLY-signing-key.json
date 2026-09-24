@@ -1,0 +1,6 @@
+{
+  "_warning": "TEST ONLY. Public on purpose so tests can re-sign the sample pack. Never use for production packs.",
+  "keyId": "test-2026-09",
+  "secretKey": "T7zkFPiVaZjTP/A2YWfbeIWY0pQZtF8nU4QYyjnjOGo=",
+  "publicKey": "NshuH4yrU4Ac5INRYC6aWbK/PawbgCrZQm4tbH1EJ7g="
+}

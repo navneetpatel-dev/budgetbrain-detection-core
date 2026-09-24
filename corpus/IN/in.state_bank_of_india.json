@@ -1,0 +1,99 @@
+[
+  {
+    "id": "in.state_bank_of_india.gapdoc_own_transfer",
+    "provenance": "gap_doc",
+    "country": "IN",
+    "institution": "in.state_bank_of_india",
+    "language": "en",
+    "input": {
+      "id": "in.state_bank_of_india.gapdoc_own_transfer",
+      "sender": "JD-SBIINB",
+      "body": "Dear Customer, Rs 2000 transferred from A/c XX4455 to A/c XX9988 (HDFC Bank). Ref 1234567890",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "context": {
+      "ownAccountTails": [
+        "4455",
+        "9988"
+      ]
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "DEBIT",
+      "transactionType": "transfer",
+      "amount": "2000.00",
+      "currency": "INR",
+      "subtype": "self_transfer",
+      "accountTail": "4455",
+      "referenceNumber": "1234567890"
+    },
+    "notes": "Both accounts belong to the user.",
+    "gaps": [
+      "C1",
+      "E4"
+    ]
+  },
+  {
+    "id": "in.state_bank_of_india.failed_upi",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.state_bank_of_india",
+    "language": "en",
+    "input": {
+      "id": "in.state_bank_of_india.failed_upi",
+      "sender": "VM-SBIINB",
+      "body": "Your UPI transaction of Rs 450.00 to merchant@ybl has failed. Amount if debited will be reversed within 3 working days.",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "IGNORED",
+      "reasonCode": "failed_or_declined"
+    }
+  },
+  {
+    "id": "in.state_bank_of_india.ambiguous_direction",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.state_bank_of_india",
+    "language": "en",
+    "input": {
+      "id": "in.state_bank_of_india.ambiguous_direction",
+      "sender": "VM-SBIINB",
+      "body": "Rs 1200 debit/credit adjustment on A/c XX4455 on 23-09-26. Contact branch for details.",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "NEEDS_REVIEW",
+      "reasonCode": "ambiguous_direction"
+    },
+    "gaps": [
+      "E7"
+    ]
+  },
+  {
+    "id": "in.state_bank_of_india.interest_credit",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.state_bank_of_india",
+    "language": "en",
+    "input": {
+      "id": "in.state_bank_of_india.interest_credit",
+      "sender": "VM-SBIINB",
+      "body": "Interest of Rs 342.00 credited to A/c XX4455 on 23-09-26.",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "CREDIT",
+      "transactionType": "income",
+      "amount": "342.00",
+      "currency": "INR",
+      "transactionDate": "2026-09-23",
+      "accountTail": "4455"
+    }
+  }
+]

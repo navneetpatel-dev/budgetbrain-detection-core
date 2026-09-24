@@ -1,0 +1,376 @@
+[
+  {
+    "id": "in.hdfc_bank.gapdoc_upi_swiggy",
+    "provenance": "gap_doc",
+    "country": "IN",
+    "institution": "in.hdfc_bank",
+    "language": "en",
+    "input": {
+      "id": "in.hdfc_bank.gapdoc_upi_swiggy",
+      "sender": "VM-HDFCBK",
+      "body": "Rs.1,250.00 debited from a/c **1234 on 23-09-26 to VPA swiggy@icici. Avl Bal Rs 20,500.00. Not you? Call 18001234567",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "DEBIT",
+      "transactionType": "expense",
+      "amount": "1250.00",
+      "currency": "INR",
+      "transactionDate": "2026-09-23",
+      "accountTail": "1234",
+      "institutionId": "in.hdfc_bank",
+      "merchantKind": "brand",
+      "merchantId": "m.swiggy",
+      "merchantName": "Swiggy",
+      "paymentMethod": "upi"
+    },
+    "notes": "Balance must not be taken as the amount; merchant from VPA must be clean.",
+    "gaps": [
+      "X4",
+      "X1"
+    ]
+  },
+  {
+    "id": "in.hdfc_bank.gapdoc_upi_p2p_ddmmyy",
+    "provenance": "gap_doc",
+    "country": "IN",
+    "institution": "in.hdfc_bank",
+    "language": "en",
+    "input": {
+      "id": "in.hdfc_bank.gapdoc_upi_p2p_ddmmyy",
+      "sender": "AD-HDFCBK",
+      "body": "Sent Rs.500.00 From HDFC Bank A/C *1234 To RAMESH KUMAR On 05/09/26 Ref 425612345678 Not You? Call 18001234567/SMS BLOCK UPI to 7000000001",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "DEBIT",
+      "transactionType": "expense",
+      "amount": "500.00",
+      "currency": "INR",
+      "subtype": "p2p",
+      "transactionDate": "2026-09-05",
+      "accountTail": "1234",
+      "referenceNumber": "425612345678",
+      "merchantKind": "p2p",
+      "paymentMethod": "upi"
+    },
+    "notes": "Indian DD/MM/YY date; old parser read it as May 8.",
+    "gaps": [
+      "X1"
+    ]
+  },
+  {
+    "id": "in.hdfc_bank.gapdoc_refund",
+    "provenance": "gap_doc",
+    "country": "IN",
+    "institution": "in.hdfc_bank",
+    "language": "en",
+    "input": {
+      "id": "in.hdfc_bank.gapdoc_refund",
+      "sender": "VM-HDFCBK",
+      "body": "Rs 500 refund credited to your a/c XX1234 from AMAZON. Avl bal Rs 3,000",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "CREDIT",
+      "transactionType": "refund",
+      "amount": "500.00",
+      "currency": "INR",
+      "accountTail": "1234",
+      "merchantKind": "brand",
+      "merchantId": "m.amazon"
+    },
+    "notes": "Must stay a refund end to end (backend saved it as income).",
+    "gaps": [
+      "P0-4"
+    ]
+  },
+  {
+    "id": "in.hdfc_bank.gapdoc_otp",
+    "provenance": "gap_doc",
+    "country": "IN",
+    "institution": "in.hdfc_bank",
+    "language": "en",
+    "input": {
+      "id": "in.hdfc_bank.gapdoc_otp",
+      "sender": "VM-HDFCBK",
+      "body": "Your OTP for txn of Rs 5000 at AMAZON is 482913. Do not share it with anyone.",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "IGNORED",
+      "reasonCode": "otp_marker"
+    }
+  },
+  {
+    "id": "in.hdfc_bank.gapdoc_card_spend_otp_footer",
+    "provenance": "gap_doc",
+    "country": "IN",
+    "institution": "in.hdfc_bank",
+    "language": "en",
+    "input": {
+      "id": "in.hdfc_bank.gapdoc_card_spend_otp_footer",
+      "sender": "VM-HDFCBK",
+      "body": "Rs 2,500 spent on HDFC Bank Credit Card xx1111 at DMART on 2026-09-20. Avl Lmt Rs 50,000. Never share your OTP/PIN",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "DEBIT",
+      "transactionType": "expense",
+      "amount": "2500.00",
+      "currency": "INR",
+      "transactionDate": "2026-09-20",
+      "accountTail": "1111",
+      "merchantKind": "brand",
+      "merchantId": "m.dmart",
+      "paymentMethod": "card"
+    },
+    "notes": "Safety footer mentions OTP; this is a real spend.",
+    "gaps": [
+      "E1"
+    ]
+  },
+  {
+    "id": "in.hdfc_bank.gapdoc_salary",
+    "provenance": "gap_doc",
+    "country": "IN",
+    "institution": "in.hdfc_bank",
+    "language": "en",
+    "input": {
+      "id": "in.hdfc_bank.gapdoc_salary",
+      "sender": "VM-HDFCBK",
+      "body": "Salary of Rs 50,000.00 credited to a/c XX1234 on 23-09-26 by ACME CORP",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "CREDIT",
+      "transactionType": "income",
+      "amount": "50000.00",
+      "currency": "INR",
+      "transactionDate": "2026-09-23",
+      "accountTail": "1234",
+      "merchantKind": "raw",
+      "merchantName": "Acme Corp"
+    },
+    "notes": "Gap doc sample used 30-09-26; changed to the received day so the future-date rule doesn't apply.",
+    "gaps": [
+      "X4",
+      "F1"
+    ]
+  },
+  {
+    "id": "in.hdfc_bank.upi_credit_p2p",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.hdfc_bank",
+    "language": "en",
+    "input": {
+      "id": "in.hdfc_bank.upi_credit_p2p",
+      "sender": "VM-HDFCBK",
+      "body": "Money Received - INR 750.00 in your A/c XX1234 on 23-09-26 from VPA priya.s@okaxis. UPI Ref 426512349876. Avl Bal INR 12,340.00",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "NEEDS_REVIEW",
+      "direction": "CREDIT",
+      "transactionType": "income",
+      "amount": "750.00",
+      "currency": "INR",
+      "subtype": "p2p",
+      "reasonCode": "medium_confidence",
+      "accountTail": "1234",
+      "referenceNumber": "426512349876",
+      "merchantKind": "p2p",
+      "paymentMethod": "upi"
+    },
+    "notes": "A P2P credit may be a repayment, not income: review.",
+    "gaps": [
+      "C2"
+    ]
+  },
+  {
+    "id": "in.hdfc_bank.cashback_credit",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.hdfc_bank",
+    "language": "en",
+    "input": {
+      "id": "in.hdfc_bank.cashback_credit",
+      "sender": "VM-HDFCBK",
+      "body": "Cashback of Rs 50.00 credited to your HDFC Bank Card xx1111 on 23-09-26.",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "CREDIT",
+      "transactionType": "refund",
+      "amount": "50.00",
+      "currency": "INR",
+      "subtype": "cashback",
+      "transactionDate": "2026-09-23",
+      "accountTail": "1111"
+    },
+    "notes": "Cashback is kept apart from income (spec §10).",
+    "gaps": [
+      "C3"
+    ]
+  },
+  {
+    "id": "in.hdfc_bank.mandate_future",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.hdfc_bank",
+    "language": "en",
+    "input": {
+      "id": "in.hdfc_bank.mandate_future",
+      "sender": "VM-HDFCBK",
+      "body": "Rs 649.00 will be debited from a/c XX1234 on 25-09-26 towards NETFLIX mandate. To cancel visit hdfc.example",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "IGNORED",
+      "reasonCode": "future_or_request"
+    },
+    "gaps": [
+      "E8"
+    ]
+  },
+  {
+    "id": "in.hdfc_bank.hindi_debit",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.hdfc_bank",
+    "language": "hi",
+    "input": {
+      "id": "in.hdfc_bank.hindi_debit",
+      "sender": "VM-HDFCBK",
+      "body": "आपके खाते XX1234 से ₹500.00 डेबिट किए गए, दिनांक 23-09-26। उपलब्ध शेष ₹4,500.00",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "DEBIT",
+      "transactionType": "expense",
+      "amount": "500.00",
+      "currency": "INR",
+      "transactionDate": "2026-09-23",
+      "accountTail": "1234"
+    },
+    "notes": "Non-English lexicon."
+  },
+  {
+    "id": "in.hdfc_bank.usd_card_spend",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.hdfc_bank",
+    "language": "en",
+    "input": {
+      "id": "in.hdfc_bank.usd_card_spend",
+      "sender": "VM-HDFCBK",
+      "body": "USD 12.99 spent on HDFC Bank Card xx1111 at NETFLIX.COM on 2026-09-22. Avl Lmt Rs 48,000",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "DEBIT",
+      "transactionType": "expense",
+      "amount": "12.99",
+      "currency": "USD",
+      "transactionDate": "2026-09-22",
+      "accountTail": "1111",
+      "merchantKind": "brand",
+      "merchantId": "m.netflix",
+      "paymentMethod": "card"
+    },
+    "gaps": [
+      "X8"
+    ]
+  },
+  {
+    "id": "in.hdfc_bank.card_declined",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.hdfc_bank",
+    "language": "en",
+    "input": {
+      "id": "in.hdfc_bank.card_declined",
+      "sender": "VM-HDFCBK",
+      "body": "Transaction of Rs 3,200.00 on HDFC Bank Card xx1111 at CROMA was declined due to insufficient limit.",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "IGNORED",
+      "reasonCode": "failed_or_declined"
+    }
+  },
+  {
+    "id": "in.hdfc_bank.card_bill_debit",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.hdfc_bank",
+    "language": "en",
+    "input": {
+      "id": "in.hdfc_bank.card_bill_debit",
+      "sender": "VM-HDFCBK",
+      "body": "Rs 15,000.00 debited from a/c XX1234 on 23-09-26 towards Axis Bank Credit Card XX4321 bill payment. Ref 428012345678",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "context": {
+      "ownAccountTails": [
+        "1234",
+        "4321"
+      ]
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "DEBIT",
+      "transactionType": "transfer",
+      "amount": "15000.00",
+      "currency": "INR",
+      "subtype": "card_bill",
+      "transactionDate": "2026-09-23",
+      "accountTail": "1234",
+      "referenceNumber": "428012345678"
+    },
+    "notes": "Bank-side leg of the card bill payment; pairs with the Axis credit.",
+    "gaps": [
+      "C1"
+    ]
+  },
+  {
+    "id": "in.hdfc_bank.statement_notice",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.hdfc_bank",
+    "language": "en",
+    "input": {
+      "id": "in.hdfc_bank.statement_notice",
+      "sender": "VM-HDFCBK",
+      "body": "Your HDFC Bank credit card e-statement for Sep 2026 is ready. Total due Rs 12,345.00, due on 10-10-26.",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "IGNORED",
+      "reasonCode": "non_transaction_notice"
+    }
+  }
+]

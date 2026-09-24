@@ -1,0 +1,159 @@
+[
+  {
+    "id": "in.icici_bank.gapdoc_ddmonyy",
+    "provenance": "gap_doc",
+    "country": "IN",
+    "institution": "in.icici_bank",
+    "language": "en",
+    "input": {
+      "id": "in.icici_bank.gapdoc_ddmonyy",
+      "sender": "VM-ICICIB",
+      "body": "ICICI Bank Acct XX123 debited for Rs 1000.00 on 23-Sep-26; A KUMAR credited. UPI:425698712345. Call 18001234567 for dispute.",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "DEBIT",
+      "transactionType": "expense",
+      "amount": "1000.00",
+      "currency": "INR",
+      "subtype": "p2p",
+      "transactionDate": "2026-09-23",
+      "accountTail": "123",
+      "referenceNumber": "425698712345",
+      "merchantKind": "p2p",
+      "paymentMethod": "upi"
+    },
+    "notes": "DD-Mon-YY must not shift a day in IST; 'credited' refers to the payee, not the user.",
+    "gaps": [
+      "X1",
+      "E7"
+    ]
+  },
+  {
+    "id": "in.icici_bank.atm_withdrawal",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.icici_bank",
+    "language": "en",
+    "input": {
+      "id": "in.icici_bank.atm_withdrawal",
+      "sender": "VM-ICICIB",
+      "body": "Rs 2,000.00 withdrawn at ATM from ICICI Bank Acct XX123 on 23-Sep-26. Avl Bal Rs 8,000.00",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "DEBIT",
+      "transactionType": "transfer",
+      "amount": "2000.00",
+      "currency": "INR",
+      "transactionDate": "2026-09-23",
+      "accountTail": "123",
+      "paymentMethod": "cash",
+      "merchantKind": "none"
+    },
+    "notes": "Decision: ATM cash is a transfer (bank to cash), so later cash spending isn't double counted."
+  },
+  {
+    "id": "in.icici_bank.promo",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.icici_bank",
+    "language": "en",
+    "input": {
+      "id": "in.icici_bank.promo",
+      "sender": "VM-ICICIB",
+      "body": "Congratulations! You are pre-approved for a Personal Loan of Rs 5,00,000. Apply now: icici.example/pl",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "IGNORED",
+      "reasonCode": "promo_marker"
+    }
+  },
+  {
+    "id": "in.icici_bank.lakh_grouping",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.icici_bank",
+    "language": "en",
+    "input": {
+      "id": "in.icici_bank.lakh_grouping",
+      "sender": "VM-ICICIB",
+      "body": "Dear Customer, Acct XX123 is credited with Rs 1,25,000.00 on 23-Sep-26 by NEFT from GLOBEX PVT LTD. Info: NEFT-N266123456789",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "CREDIT",
+      "transactionType": "income",
+      "amount": "125000.00",
+      "currency": "INR",
+      "transactionDate": "2026-09-23",
+      "accountTail": "123",
+      "merchantKind": "raw",
+      "merchantName": "Globex",
+      "paymentMethod": "bank_transfer"
+    },
+    "notes": "Indian lakh grouping; legal suffix removed.",
+    "gaps": [
+      "X3",
+      "X4"
+    ]
+  },
+  {
+    "id": "in.icici_bank.loan_emi",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.icici_bank",
+    "language": "en",
+    "input": {
+      "id": "in.icici_bank.loan_emi",
+      "sender": "VM-ICICIB",
+      "body": "EMI of Rs 8,450.00 for Loan A/c XX9012 debited from Acct XX123 on 23-Sep-26.",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "android_sms"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "DEBIT",
+      "transactionType": "expense",
+      "amount": "8450.00",
+      "currency": "INR",
+      "transactionDate": "2026-09-23",
+      "accountTail": "123"
+    }
+  },
+  {
+    "id": "in.icici_bank.email_alert",
+    "provenance": "synthetic",
+    "country": "IN",
+    "institution": "in.icici_bank",
+    "language": "en",
+    "input": {
+      "id": "in.icici_bank.email_alert",
+      "sender": "alerts@icicibank.com",
+      "body": "Dear Customer, your ICICI Bank Credit Card XX4444 has been used for a transaction of INR 2,340.00 on Sep 23, 2026 at 09:41:12. Info: AMAZON PAY INDIA.",
+      "receivedAt": "2026-09-23T10:00:00+05:30",
+      "source": "email"
+    },
+    "expected": {
+      "terminal": "CREATED",
+      "direction": "DEBIT",
+      "transactionType": "expense",
+      "amount": "2340.00",
+      "currency": "INR",
+      "transactionDate": "2026-09-23",
+      "accountTail": "4444",
+      "merchantKind": "brand",
+      "merchantId": "m.amazon",
+      "paymentMethod": "card"
+    },
+    "notes": "Email source with a month-name date."
+  }
+]
