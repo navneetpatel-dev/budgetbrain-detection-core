@@ -47,6 +47,7 @@ function item(i) {
     categorySource: null,
     financialAccountId: null,
     transactionDate: '2026-09-23',
+    receivedAt: '2026-09-23T10:00:00+05:30',
     evidence: {
       templateMatched: false, institutionVerified: true, amountRoleUnique: true, directionUnambiguous: true,
       merchantKnown: false, dateExtracted: true, referencePresent: false, merchantFuzzy: false,

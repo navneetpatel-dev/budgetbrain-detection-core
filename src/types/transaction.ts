@@ -127,6 +127,11 @@ export interface SyncItemPayload {
   categorySource: 'user' | 'rule' | 'knowledge_base' | 'context' | 'fallback' | null;
   financialAccountId: string | null;
   transactionDate: string;
+  /**
+   * When the message arrived (ISO 8601 with offset). The server needs it to recompute the
+   * fingerprint itself for messages without a reference number, instead of trusting the client.
+   */
+  receivedAt: string;
   evidence: DetectionEvidence;
   confidenceTier: ConfidenceTier;
   dedupFingerprint: string;
