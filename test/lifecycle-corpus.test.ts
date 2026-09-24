@@ -78,3 +78,21 @@ describe('compareCorpusResult', () => {
     ).toEqual([{ field: 'terminal', expected: 'CREATED', actual: 'NEEDS_REVIEW' }]);
   });
 });
+
+describe('lifecycle helpers (v0.3)', () => {
+  it('assertTransition returns the target or throws', async () => {
+    const { assertTransition } = await import('../src');
+    expect(assertTransition('SYNC_PENDING', 'SYNCED')).toBe('SYNCED');
+    expect(() => assertTransition('SYNCED', 'SYNC_PENDING')).toThrow(/SYNCED -> SYNC_PENDING/);
+  });
+
+  it('maps every sync result to an allowed transition from SYNC_PENDING', async () => {
+    const { lifecycleForSyncResult } = await import('../src');
+    const statuses = ['created', 'needs_review', 'already_synced', 'validation_error'] as const;
+    for (const status of statuses) {
+      expect(canTransition('SYNC_PENDING', lifecycleForSyncResult(status).state)).toBe(true);
+    }
+    expect(lifecycleForSyncResult('validation_error')).toEqual({ state: 'IGNORED', reason: 'server_rejected', awaitingReview: false });
+    expect(lifecycleForSyncResult('needs_review').awaitingReview).toBe(true);
+  });
+});
