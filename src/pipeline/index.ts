@@ -5,6 +5,7 @@ export { findMoney, findAccounts, findDates, findReference, findVpas, parseAmoun
 export {
   cleanMerchantName,
   merchantKey,
+  rawDomain,
   resolveMerchantName,
   jaroWinkler,
   looksLikePerson,

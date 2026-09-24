@@ -24,6 +24,7 @@ const RAIL_PREFIX = /^(?:upi|pos|neft|imps|rtgs|ach|sepa|vps|ecom|pur|purchase)[
 /** Legal suffixes removed from display names and keys. "Corp" is kept: it often is the name. */
 const LEGAL_SUFFIX = /(?:\s(?:private|pvt\.?|pte\.?))?\s(?:ltd\.?|limited|llp|llc|inc\.?|gmbh|plc|s\.?a\.?|ag|b\.?v\.?)$/i;
 const DOMAIN_SUFFIX = /\.(?:com|in|co\.in|net|org|co|io|app)$/i;
+const WWW_PREFIX = /^www\./i;
 /** Store and terminal numbers: `DMART 0423`, `STORE #12`. */
 const STORE_NUMBER = /\s(?:#\s?|no\.?\s?|store\s)?\d{2,8}$/i;
 
@@ -31,7 +32,7 @@ export function cleanMerchantName(raw: string): string {
   let name = trimChars(collapseSpaces(nfkc(raw)), ' "\'([', ' "\')].,;:');
   for (let i = 0; i < 3; i += 1) {
     const before = name;
-    name = name.replace(RAIL_PREFIX, '').replace(DOMAIN_SUFFIX, '').replace(LEGAL_SUFFIX, '').replace(STORE_NUMBER, '').trim();
+    name = name.replace(RAIL_PREFIX, '').replace(WWW_PREFIX, '').replace(DOMAIN_SUFFIX, '').replace(LEGAL_SUFFIX, '').replace(STORE_NUMBER, '').trim();
     if (name === before) break;
   }
   return name;
@@ -89,11 +90,32 @@ function aliasHit(pack: CompiledPack, key: string, country: string | null): Pack
   return null;
 }
 
+/** `NETFLIX.COM` → `netflix.com`: a web domain the raw name itself carries, if any. */
+export function rawDomain(raw: string): string | null {
+  const match = /(?:^|[\s/@])(?:www\.)?([a-z0-9][a-z0-9-]*(?:\.[a-z0-9-]+)*\.(?:com|in|co\.in|net|org|co|io|app))$/i.exec(
+    trimChars(collapseSpaces(nfkc(raw)), ' "\'([', ' "\')].,;:'),
+  );
+  return match ? match[1]!.toLowerCase() : null;
+}
+
+/** What makes two merchants the same brand: the Wikidata id, else the domain, else the id. */
+function identity(merchant: PackMerchant): string {
+  return merchant.wikidataId ? `wd:${merchant.wikidataId}` : merchant.domain ? `web:${merchant.domain.toLowerCase()}` : `id:${merchant.id}`;
+}
+
+function sameDomain(a: string, b: string): boolean {
+  const strip = (d: string) => d.toLowerCase().replace(/^www\./, '');
+  return strip(a) === strip(b);
+}
+
 /**
  * Strict matching: an exact alias for the whole name or its leading words (`amazon pay india`
  * → `amazon pay`), then a fuzzy match only for single-word names with Jaro-Winkler ≥ 0.92, the
- * same first letter and a merchant from the same country or a global brand. Anything else
- * stays the cleaned raw name, never a guessed brand (gap M1).
+ * same first letter and a merchant from the same country or a global brand. The fuzzy match
+ * never crosses brands (plan T3.8): when close aliases belong to different brands (different
+ * Wikidata ids or domains) it is ambiguous, and a name that carries its own web domain never
+ * matches a brand with another one. Anything else stays the cleaned raw name, never a guessed
+ * brand (gap M1).
  */
 export function resolveMerchantName(raw: string, pack: CompiledPack, country: string | null): ResolvedMerchant {
   const cleaned = cleanMerchantName(raw);
@@ -105,14 +127,25 @@ export function resolveMerchantName(raw: string, pack: CompiledPack, country: st
     if (hit) return { kind: 'brand', name: hit.name, merchantId: hit.id, merchant: hit, key, fuzzy: false };
   }
   if (words.length === 1 && key.length >= 5) {
+    const domain = rawDomain(raw);
+    let best: { merchant: PackMerchant; score: number } | null = null;
+    const brands = new Set<string>();
     for (const [alias, entries] of pack.aliases) {
-      if (alias.includes(' ') || alias[0] !== key[0] || jaroWinkler(alias, key) < 0.92) continue;
+      if (alias.includes(' ') || alias[0] !== key[0]) continue;
+      const score = jaroWinkler(alias, key);
+      if (score < 0.92) continue;
       for (const entry of entries) {
         const merchant = pack.merchants.get(entry.merchantId);
         if (!merchant) continue;
         if (merchant.country !== null && country !== null && merchant.country !== country) continue;
-        return { kind: 'brand', name: merchant.name, merchantId: merchant.id, merchant, key, fuzzy: true };
+        if (domain && merchant.domain && !sameDomain(domain, merchant.domain)) continue;
+        brands.add(identity(merchant));
+        if (!best || score > best.score) best = { merchant, score };
       }
+    }
+    if (best && brands.size === 1) {
+      const { merchant } = best;
+      return { kind: 'brand', name: merchant.name, merchantId: merchant.id, merchant, key, fuzzy: true };
     }
   }
   return { kind: 'raw', name: titleCase(cleaned), merchantId: null, merchant: null, key, fuzzy: false };
